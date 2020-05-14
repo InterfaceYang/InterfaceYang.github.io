@@ -7,13 +7,15 @@
   
   <title>JavaScript中事件执行顺序 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="article">
+  <meta name="description" content="JavaScript作为单线程语言的代表，在处理复杂事件时，采用的是回调的方 用setTimeout来实现setIntervalsetInterval可以保证固定时间间隔将要执行的事件推到事件的执行队列，但是如果这个事件执行需要很长时间，而在推入时间执行队列时候，还没有完成，这就容易造成事件的堆积。程序连续运行好几次，而之间没有间隔 123456789101112function say(deal">
+<meta property="og:type" content="article">
 <meta property="og:title" content="JavaScript中事件执行顺序">
 <meta property="og:url" content="http://yoursite.com/2020/05/15/JavaScript%E4%B8%AD%E4%BA%8B%E4%BB%B6%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="JavaScript作为单线程语言的代表，在处理复杂事件时，采用的是回调的方 用setTimeout来实现setIntervalsetInterval可以保证固定时间间隔将要执行的事件推到事件的执行队列，但是如果这个事件执行需要很长时间，而在推入时间执行队列时候，还没有完成，这就容易造成事件的堆积。程序连续运行好几次，而之间没有间隔 123456789101112function say(deal">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-05-14T16:44:30.000Z">
-<meta property="article:modified_time" content="2020-05-14T16:44:30.382Z">
+<meta property="article:modified_time" content="2020-05-14T16:54:31.117Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
   
@@ -86,7 +88,11 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <p>JavaScript作为单线程语言的代表，在处理复杂事件时，采用的是回调的方</p>
+<h3 id="用setTimeout来实现setInterval"><a href="#用setTimeout来实现setInterval" class="headerlink" title="用setTimeout来实现setInterval"></a>用setTimeout来实现setInterval</h3><p>setInterval可以保证固定时间间隔将要执行的事件推到事件的执行队列，但是如果这个事件执行需要很长时间，而在推入时间执行队列时候，还没有完成，这就容易造成事件的堆积。程序连续运行好几次，而之间没有间隔</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">say</span>(<span class="params">dealy</span>)</span>&#123;</span><br><span class="line">  <span class="comment">//something</span></span><br><span class="line">   <span class="built_in">console</span>.log(<span class="string">'helloworld'</span>,<span class="keyword">new</span> <span class="built_in">Date</span>().toString())</span><br><span class="line">  setTimeout(say,dealy);</span><br><span class="line">&#125;</span><br><span class="line">setTimeout(say,dealy)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">   <span class="built_in">console</span>.log(<span class="string">'helloworld'</span>,<span class="keyword">new</span> <span class="built_in">Date</span>().toString())</span><br><span class="line">   setTimeout(<span class="built_in">arguments</span>.callee,<span class="number">200</span>);</span><br><span class="line">&#125;,<span class="number">200</span>);</span><br></pre></td></tr></table></figure>
+
+
       
     </div>
     <footer class="article-footer">

@@ -7,13 +7,15 @@
   
   <title>JavaScript的执行上下文和作用域 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="article">
+  <meta name="description" content="概念​    JavaScript作用域是指函数运行时，变量的有效区间，落到函数运行范畴上，是指JavaScript的执行上下文，变量作为执行上下文区间的本地变量。 可以分为全局，函数以及eval上下文  全局上下文 ​        全局上下文只有一个，是指整个JavaScript运行时。当执行JavaScript文件的时候，会将全局上下午压到当前的执行栈，this默认指想window对象  函">
+<meta property="og:type" content="article">
 <meta property="og:title" content="JavaScript的执行上下文和作用域">
 <meta property="og:url" content="http://yoursite.com/2020/05/15/JavaScript%E7%9A%84%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E5%92%8C%E4%BD%9C%E7%94%A8%E5%9F%9F/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="概念​    JavaScript作用域是指函数运行时，变量的有效区间，落到函数运行范畴上，是指JavaScript的执行上下文，变量作为执行上下文区间的本地变量。 可以分为全局，函数以及eval上下文  全局上下文 ​        全局上下文只有一个，是指整个JavaScript运行时。当执行JavaScript文件的时候，会将全局上下午压到当前的执行栈，this默认指想window对象  函">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-05-14T16:44:18.000Z">
-<meta property="article:modified_time" content="2020-05-14T16:44:18.529Z">
+<meta property="article:modified_time" content="2020-05-14T16:53:55.143Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
   
@@ -86,7 +88,32 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h5 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h5><p>​    JavaScript作用域是指函数运行时，变量的有效区间，落到函数运行范畴上，是指JavaScript的执行上下文，变量作为执行上下文区间的本地变量。</p>
+<p>可以分为全局，函数以及eval上下文</p>
+<ul>
+<li><p>全局上下文</p>
+<p>​        全局上下文只有一个，是指整个JavaScript运行时。当执行JavaScript文件的时候，会将全局上下午压到当前的执行栈，this默认指想window对象</p>
+</li>
+<li><p>函数上下文</p>
+<p>​        函数作用域是在函数执行的时候创建的函数执行上下文，this指向默认指向执行该函数的对象，可通过bind，apply等改变指向。当JavaScript执行引擎执行到函数的时候，会把函数上下文继续压到当前的执行栈</p>
+</li>
+<li><p>eval上下文</p>
+<p>​        eval函数也会产生新的作用域即函数执行上下文。</p>
+</li>
+</ul>
+<h5 id="执行栈管理过程即函数执行过程"><a href="#执行栈管理过程即函数执行过程" class="headerlink" title="执行栈管理过程即函数执行过程"></a>执行栈管理过程即函数执行过程</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//1，首先JavaScript引擎创建全局上下文，并且将其压入到当前执行栈</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//2，遇到函数，函数执行会生成自己的函数执行上下文，将函数上下文压入到当前执行栈</span></span><br><span class="line"><span class="comment">// 函数执行的标志是在函数名后边有（），即为函数执行的讯号。</span></span><br><span class="line"></span><br><span class="line">first()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">first</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'i am first'</span>)</span><br><span class="line">    <span class="comment">// 3,又遇到了函数，继续生成属于自己的执行上下文，继续压入当前执行栈</span></span><br><span class="line">    sencod()</span><br><span class="line">    <span class="comment">// 4，sencod函数执行完毕，推出执行栈，这个执行上下文被删除，所有本地变量也无效。</span></span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//5，first函数执行完毕，推出执行栈</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sencod</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  	<span class="keyword">let</span> str = <span class="string">"hello"</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'i am sencod'</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'i am outside'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出</span></span><br><span class="line"><span class="comment">// console.log('i am first'）=&gt; console.log('i am sencod'）=&gt; console.log('i am outside'）</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">first()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">first</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'i am first'</span>)</span><br><span class="line">    sencod()</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sencod</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'i am sencod'</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"> 		<span class="built_in">console</span>.log(<span class="string">'i am third'</span>)       </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="JavaScript创建执行栈过程"><a href="#JavaScript创建执行栈过程" class="headerlink" title="JavaScript创建执行栈过程"></a>JavaScript创建执行栈过程</h5><p>​        执行上下文有两个阶段：创建阶段和执行阶段</p>
+<h6 id="创建阶段："><a href="#创建阶段：" class="headerlink" title="创建阶段："></a>创建阶段：</h6><ol>
+<li>this值的决定，即this绑定</li>
+<li>创建<strong>词法环境</strong></li>
+<li>创建<strong>变量环境</strong></li>
+</ol>
+
       
     </div>
     <footer class="article-footer">
