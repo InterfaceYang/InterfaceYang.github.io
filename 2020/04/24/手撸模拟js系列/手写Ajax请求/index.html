@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>手撸模拟js系列/手写Ajax请求 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Ajax1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909192939495969798991001011">
+<meta property="og:type" content="article">
+<meta property="og:title" content="手撸模拟js系列&#x2F;手写Ajax请求">
+<meta property="og:url" content="http://yoursite.com/2020/04/24/%E6%89%8B%E6%92%B8%E6%A8%A1%E6%8B%9Fjs%E7%B3%BB%E5%88%97/%E6%89%8B%E5%86%99Ajax%E8%AF%B7%E6%B1%82/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Ajax1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909192939495969798991001011">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-04-23T22:58:10.649Z">
+<meta property="article:modified_time" content="2020-04-23T22:58:10.650Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <!-- <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css"> -->
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-手撸模拟js系列/手写Ajax请求" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/04/24/%E6%89%8B%E6%92%B8%E6%A8%A1%E6%8B%9Fjs%E7%B3%BB%E5%88%97/%E6%89%8B%E5%86%99Ajax%E8%AF%B7%E6%B1%82/" class="article-date">
+  <time datetime="2020-04-23T22:58:10.649Z" itemprop="datePublished">2020-04-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      手撸模拟js系列/手写Ajax请求
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Ajax"><a href="#Ajax" class="headerlink" title="Ajax"></a>Ajax</h1><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">ajax</span>(<span class="params">params</span>) </span>&#123;   </span><br><span class="line"></span><br><span class="line">  params = params || &#123;&#125;;   </span><br><span class="line"></span><br><span class="line">  params.data = params.data || &#123;&#125;;   </span><br><span class="line"></span><br><span class="line">  <span class="comment">// 判断是ajax请求还是jsonp请求</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> json = params.jsonp ? jsonp(params) : json(params);   </span><br><span class="line"></span><br><span class="line">  <span class="comment">// ajax请求   </span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">json</span>(<span class="params">params</span>) </span>&#123;   </span><br><span class="line"></span><br><span class="line">    <span class="comment">//  请求方式，默认是GET</span></span><br><span class="line"></span><br><span class="line">    params.type = (params.type || <span class="string">'GET'</span>).toUpperCase(); </span><br><span class="line"></span><br><span class="line">    <span class="comment">// 避免有特殊字符，必须格式化传输数据  </span></span><br><span class="line"></span><br><span class="line">    params.data = formatParams(params.data);   </span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> xhr = <span class="literal">null</span>;    </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 实例化XMLHttpRequest对象   </span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">window</span>.XMLHttpRequest) &#123;   </span><br><span class="line"></span><br><span class="line">      xhr = <span class="keyword">new</span> XMLHttpRequest();   </span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;   </span><br><span class="line"></span><br><span class="line">      <span class="comment">// IE6及其以下版本   </span></span><br><span class="line"></span><br><span class="line">      xhr = <span class="keyword">new</span> ActiveXObjcet(<span class="string">'Microsoft.XMLHTTP'</span>);   </span><br><span class="line"></span><br><span class="line">    &#125;; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 监听事件，只要 readyState 的值变化，就会调用 readystatechange 事件 </span></span><br><span class="line"></span><br><span class="line">    xhr.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;  </span><br><span class="line"></span><br><span class="line">      <span class="comment">//  readyState属性表示请求/响应过程的当前活动阶段，4为完成，已经接收到全部响应数据</span></span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span>(xhr.readyState == <span class="number">4</span>) &#123;   </span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> status = xhr.status;  </span><br><span class="line"></span><br><span class="line">        <span class="comment">//  status：响应的HTTP状态码，以2开头的都是成功</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(status &gt;= <span class="number">200</span> &amp;&amp; status &lt; <span class="number">300</span>) &#123;   </span><br><span class="line"></span><br><span class="line">          <span class="keyword">var</span> response = <span class="string">''</span>; </span><br><span class="line"></span><br><span class="line">          <span class="comment">// 判断接受数据的内容类型  </span></span><br><span class="line"></span><br><span class="line">          <span class="keyword">var</span> type = xhr.getResponseHeader(<span class="string">'Content-type'</span>);   </span><br><span class="line"></span><br><span class="line">          <span class="keyword">if</span>(type.indexOf(<span class="string">'xml'</span>) !== <span class="number">-1</span> &amp;&amp; xhr.responseXML) &#123;   </span><br><span class="line"></span><br><span class="line">            response = xhr.responseXML; <span class="comment">//Document对象响应   </span></span><br><span class="line"></span><br><span class="line">          &#125; <span class="keyword">else</span> <span class="keyword">if</span>(type === <span class="string">'application/json'</span>) &#123;   </span><br><span class="line"></span><br><span class="line">            response = <span class="built_in">JSON</span>.parse(xhr.responseText); <span class="comment">//JSON响应   </span></span><br><span class="line"></span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;   </span><br><span class="line"></span><br><span class="line">            response = xhr.responseText; <span class="comment">//字符串响应   </span></span><br><span class="line"></span><br><span class="line">          &#125;;  </span><br><span class="line"></span><br><span class="line">          <span class="comment">// 成功回调函数 </span></span><br><span class="line"></span><br><span class="line">          params.success &amp;&amp; params.success(response);   </span><br><span class="line"></span><br><span class="line">       &#125; <span class="keyword">else</span> &#123;   </span><br><span class="line"></span><br><span class="line">          params.error &amp;&amp; params.error(status);   </span><br><span class="line"></span><br><span class="line">       &#125;   </span><br><span class="line"></span><br><span class="line">      &#125;;   </span><br><span class="line"></span><br><span class="line">    &#125;;  </span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    <span class="comment">// 连接和传输数据   </span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(params.type == <span class="string">'GET'</span>) &#123;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 三个参数：请求方式、请求地址(get方式时，传输数据是加在地址后的)、是否异步请求(同步请求的情况极少)；</span></span><br><span class="line"></span><br><span class="line">      xhr.open(params.type, params.url + <span class="string">'?'</span> + params.data, <span class="literal">true</span>);   </span><br><span class="line"></span><br><span class="line">      xhr.send(<span class="literal">null</span>);   </span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;   </span><br><span class="line"></span><br><span class="line">      xhr.open(params.type, params.url, <span class="literal">true</span>);   </span><br><span class="line"></span><br><span class="line">      <span class="comment">//必须，设置提交时的内容类型   </span></span><br><span class="line"></span><br><span class="line">      xhr.setRequestHeader(<span class="string">'Content-Type'</span>, <span class="string">'application/x-www-form-urlencoded; charset=UTF-8'</span>); </span><br><span class="line"></span><br><span class="line">      <span class="comment">// 传输数据  </span></span><br><span class="line"></span><br><span class="line">      xhr.send(params.data);   </span><br><span class="line"></span><br><span class="line">    &#125;   </span><br><span class="line"></span><br><span class="line">  &#125;  </span><br><span class="line"></span><br><span class="line">  <span class="comment">//格式化参数   </span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">formatParams</span>(<span class="params">data</span>) </span>&#123;   </span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> arr = [];   </span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> name <span class="keyword">in</span> data) &#123; </span><br><span class="line"></span><br><span class="line">      <span class="comment">//   encodeURIComponent() ：用于对 URI 中的某一部分进行编码</span></span><br><span class="line"></span><br><span class="line">      arr.push(<span class="built_in">encodeURIComponent</span>(name) + <span class="string">'='</span> + <span class="built_in">encodeURIComponent</span>(data[name]));   </span><br><span class="line"></span><br><span class="line">    &#125;;   </span><br><span class="line"></span><br><span class="line">    <span class="comment">// 添加一个随机数参数，防止缓存   </span></span><br><span class="line"></span><br><span class="line">    arr.push(<span class="string">'v='</span> + random());   </span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> arr.join(<span class="string">'&amp;'</span>);   </span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 获取随机数   </span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">random</span>(<span class="params"></span>) </span>&#123;   </span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * <span class="number">10000</span> + <span class="number">500</span>);   </span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/04/24/%E6%89%8B%E6%92%B8%E6%A8%A1%E6%8B%9Fjs%E7%B3%BB%E5%88%97/%E6%89%8B%E5%86%99Ajax%E8%AF%B7%E6%B1%82/" data-id="cka7dmw33000cz8eqet083qf4" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/04/24/%E6%89%8B%E6%92%B8%E6%A8%A1%E6%8B%9Fjs%E7%B3%BB%E5%88%97/%E4%B8%80%E4%BA%9B%E5%B8%B8%E8%A7%81%E7%9A%84%E5%9C%A8%E7%BA%BF%E7%BC%96%E7%A8%8B%E9%A2%98/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          手撸模拟js系列/一些常见的在线编程题
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/04/24/%E6%89%8B%E6%92%B8%E6%A8%A1%E6%8B%9Fjs%E7%B3%BB%E5%88%97/JsonP/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">手撸模拟js系列/JsonP</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/05/15/JavaScript%E4%B8%ADthis%E7%9A%84%E6%8C%87%E5%90%91%E9%97%AE%E9%A2%98/">7.JavaScript中this的指向问题</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/15/11.JavaScript%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/">JavaScript缓存机制</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/15/12.%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98%E5%85%A8%E9%9B%86/">JavaScript中的跨域问题</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/15/10.%E6%B5%8F%E8%A7%88%E5%99%A8%E5%9C%B0%E5%9D%80%E6%A0%8F%E8%BE%93%E5%85%A5%E5%9C%B0%E5%9D%80%E4%B9%8B%E5%90%8E/">浏览器地址输入url之后。。。</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/15/13.HTML5%20Web%20Worker/">HTML5 Web Worker</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script> -->
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

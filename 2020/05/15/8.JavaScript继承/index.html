@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>JavaScript集成 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前言​        在了解js的继承之前，需要搞清楚几个概念，亦或者属性，方便之后的讲解、 prototype：每个函数被new出来都有prototype属性，既函数的类有protytype属性proto：所有对象都包含一个__proto__属性指向它的构造函数的prototype。constructor：所有对象都包含constructor属性,这个属性包含一个指向prototype属性所在函">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript集成">
+<meta property="og:url" content="http://yoursite.com/2020/05/15/8.JavaScript%E7%BB%A7%E6%89%BF/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="前言​        在了解js的继承之前，需要搞清楚几个概念，亦或者属性，方便之后的讲解、 prototype：每个函数被new出来都有prototype属性，既函数的类有protytype属性proto：所有对象都包含一个__proto__属性指向它的构造函数的prototype。constructor：所有对象都包含constructor属性,这个属性包含一个指向prototype属性所在函">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-05-14T22:53:11.000Z">
+<meta property="article:modified_time" content="2020-05-14T22:58:23.692Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <!-- <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css"> -->
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-8.JavaScript继承" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/05/15/8.JavaScript%E7%BB%A7%E6%89%BF/" class="article-date">
+  <time datetime="2020-05-14T22:53:11.000Z" itemprop="datePublished">2020-05-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      JavaScript集成
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h5 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h5><p>​        在了解js的继承之前，需要搞清楚几个概念，亦或者属性，方便之后的讲解、</p>
+<p><code>prototype</code>：每个函数被new出来都有<code>prototype</code>属性，既函数的类有<code>protytype</code>属性<br><code>proto</code>：所有对象都包含一个<code>__proto__</code>属性指向它的构造函数的<code>prototype</code>。<br><code>constructor</code>：所有对象都包含<code>constructor</code>属性,这个属性包含一个指向<code>prototype</code>属性所在函数的指针。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Fn = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line"><span class="keyword">var</span> fn = <span class="keyword">new</span> Fn()</span><br><span class="line"></span><br><span class="line">Fn.prototype === fn.__proto__    <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="正式内容"><a href="#正式内容" class="headerlink" title="正式内容"></a>正式内容</h5><p>​        js在es6之前甚至没有类的概念，在实现继承的时候依据原型链原则。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这是个祖元素</span></span><br><span class="line"><span class="keyword">var</span> Person = <span class="function"><span class="keyword">function</span>(<span class="params">name =<span class="string">"defaultName"</span>, gifts = [<span class="string">'eat'</span>,<span class="string">'reading'</span>] </span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name;</span><br><span class="line">    <span class="keyword">this</span>.gifts = gifts;</span><br><span class="line">    <span class="keyword">this</span>.introduce = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'my name is '</span>,name)</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'my gifts is '</span>,gifts)</span><br><span class="line">        <span class="comment">//return name</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 添加原型链方法</span></span><br><span class="line">Person.prototype.eat = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'i am eatting'</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h6 id="一、继承，使用原型链继承"><a href="#一、继承，使用原型链继承" class="headerlink" title="一、继承，使用原型链继承"></a>一、继承，使用原型链继承</h6><p>​        将父类的实例作为子类的原型</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 初始化子元素</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Student</span>(<span class="params">grade</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.grade = grade</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//讲Student的原型链指向需要继承父类的实例上，就可以实现集成</span></span><br><span class="line">Student.prototype = <span class="keyword">new</span> Person()</span><br><span class="line"><span class="comment">//实例化子元素</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> student = <span class="keyword">new</span> Student(<span class="string">'grade1'</span>)</span><br><span class="line"></span><br><span class="line">student.introduce()</span><br><span class="line">student.eat()</span><br></pre></td></tr></table></figure>
+
+<p>缺点：</p>
+<ol>
+<li>共享父类的属性，如果一个子类修改，其他也会修改，这不符合预期</li>
+<li>无法向父类方法传参，即没有办法给name赋值。</li>
+</ol>
+<h6 id="二、使用构造方式的函数"><a href="#二、使用构造方式的函数" class="headerlink" title="二、使用构造方式的函数"></a>二、使用构造方式的函数</h6><p>​        使用构造函数的方法实现继承，主要是在子类内部执行父类的构造方法，并且将在子类中利用call方法改变this指向，实现继承。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Student</span>(<span class="params">name,gifts</span>) </span>&#123;</span><br><span class="line">    Person.call(<span class="keyword">this</span>, name,gifts)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> st1 = <span class="keyword">new</span> Student(<span class="string">'tom'</span>, [<span class="string">'catching mouse'</span>])</span><br><span class="line"><span class="keyword">let</span> st2 = <span class="keyword">new</span> Student(<span class="string">'jerry'</span>, [<span class="string">'dring milk'</span>])</span><br><span class="line"></span><br><span class="line">st1.introduce()</span><br><span class="line"><span class="comment">//st1.eat()</span></span><br><span class="line">st2.introduce()</span><br><span class="line"><span class="comment">//st2.eat()</span></span><br></pre></td></tr></table></figure>
+
+<p>缺点：可以看到，这种方法无法实现原型链上的方法的继承。eat方法执行时会报错</p>
+<h6 id="三，使用组合方式实现js的继承"><a href="#三，使用组合方式实现js的继承" class="headerlink" title="三，使用组合方式实现js的继承"></a>三，使用组合方式实现js的继承</h6><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Student</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">    Person.call(<span class="keyword">this</span>,...arguments)</span><br><span class="line">&#125;</span><br><span class="line">Student.prototype = Person.prototype</span><br></pre></td></tr></table></figure>
+
+<p>组合使用原型链继承和构造函数继承方法，</p>
+<p>将Studen之类的prototype指向Person的prototype，</p>
+<p>在子类内部通过call将改变this的执行</p>
+<p>缺点：通过Student构造函数new出来的实例，student.__proto.constructor.name == Person，显然这不符合预期</p>
+<h6 id="四，寄生组合继承"><a href="#四，寄生组合继承" class="headerlink" title="四，寄生组合继承"></a>四，寄生组合继承</h6><p>既然通过组合方式实现js继承无法维护之类的构造函数，那么，在组合完之后，将<code>_proto_.constructo</code>r修改一下不就得了，于是有了终极方案：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Student</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">    Person.call(<span class="keyword">this</span>,...arguments)</span><br><span class="line">&#125;</span><br><span class="line">Student.prototype = <span class="built_in">Object</span>.create(Person.prototype)</span><br><span class="line"><span class="comment">// 然后_proto.constructor指向Student就可以了。</span></span><br><span class="line">Son.prototype.constructor = Son;</span><br></pre></td></tr></table></figure>
+
+<h6 id="五，ES6的extend方法"><a href="#五，ES6的extend方法" class="headerlink" title="五，ES6的extend方法"></a>五，ES6的extend方法</h6><p>前人写的集成方面的好文</p>
+<p><a href="https://juejin.im/post/5e8aa20651882573a343d089?utm_source=gold_browser_extension" target="_blank" rel="noopener">https://juejin.im/post/5e8aa20651882573a343d089?utm_source=gold_browser_extension</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/05/15/8.JavaScript%E7%BB%A7%E6%89%BF/" data-id="cka7dmw2q0005z8eqfe1e968t" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/05/15/13.%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          网络协议
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/05/15/9.JavaScript%E4%B8%ADnew%E5%85%B3%E9%94%AE%E5%AD%97/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">JavaScript中new关键字解析</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/05/15/JavaScript%E4%B8%ADthis%E7%9A%84%E6%8C%87%E5%90%91%E9%97%AE%E9%A2%98/">7.JavaScript中this的指向问题</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/15/11.JavaScript%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/">JavaScript缓存机制</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/15/12.%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98%E5%85%A8%E9%9B%86/">JavaScript中的跨域问题</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/15/10.%E6%B5%8F%E8%A7%88%E5%99%A8%E5%9C%B0%E5%9D%80%E6%A0%8F%E8%BE%93%E5%85%A5%E5%9C%B0%E5%9D%80%E4%B9%8B%E5%90%8E/">浏览器地址输入url之后。。。</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/15/13.HTML5%20Web%20Worker/">HTML5 Web Worker</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script> -->
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

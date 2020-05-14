@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>JavaScript中的跨域问题 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="跨域问题的由来​        主要是因为网络通信同源策略的原因。网络通信同源策略：计算机通信过程中，非同源页面不能相互访问数据，所谓非同源是指，协议，域名，端口号，三者有一个不同。 ​        之所以有同源策略是考虑到安全方面，考虑到用户的隐私。最根本原因是因为通信协议的无状态话，服务器也不知道这个网络请求来自何处。可以添加referer请求头标记网页来源，但是不能保证每个服务器后端都会参">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript中的跨域问题">
+<meta property="og:url" content="http://yoursite.com/2020/05/15/12.%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98%E5%85%A8%E9%9B%86/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="跨域问题的由来​        主要是因为网络通信同源策略的原因。网络通信同源策略：计算机通信过程中，非同源页面不能相互访问数据，所谓非同源是指，协议，域名，端口号，三者有一个不同。 ​        之所以有同源策略是考虑到安全方面，考虑到用户的隐私。最根本原因是因为通信协议的无状态话，服务器也不知道这个网络请求来自何处。可以添加referer请求头标记网页来源，但是不能保证每个服务器后端都会参">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/007S8ZIlgy1gdpnzko5eoj31tc0mkgpv.jpg">
+<meta property="article:published_time" content="2020-05-14T22:53:11.000Z">
+<meta property="article:modified_time" content="2020-05-14T22:59:38.848Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/007S8ZIlgy1gdpnzko5eoj31tc0mkgpv.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <!-- <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css"> -->
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-12.跨域问题全集" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/05/15/12.%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98%E5%85%A8%E9%9B%86/" class="article-date">
+  <time datetime="2020-05-14T22:53:11.000Z" itemprop="datePublished">2020-05-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      JavaScript中的跨域问题
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="跨域问题的由来"><a href="#跨域问题的由来" class="headerlink" title="跨域问题的由来"></a>跨域问题的由来</h4><p>​        主要是因为网络通信同源策略的原因。网络通信同源策略：计算机通信过程中，非同源页面不能相互访问数据，所谓非同源是指，协议，域名，端口号，三者有一个不同。</p>
+<p>​        之所以有同源策略是考虑到安全方面，考虑到用户的隐私。最根本原因是因为通信协议的无状态话，服务器也不知道这个网络请求来自何处。可以添加<code>referer</code>请求头标记网页来源，但是不能保证每个服务器后端都会参照字段进行识别，并且虽然前端无法修改<code>referer</code>请求头，但是可以通过搭建nginx代理设置’<code>proxy_set_header referer&#39;</code></p>
+<h4 id="跨域问题的解决方案"><a href="#跨域问题的解决方案" class="headerlink" title="跨域问题的解决方案"></a>跨域问题的解决方案</h4><h5 id="CORS跨域请求"><a href="#CORS跨域请求" class="headerlink" title="CORS跨域请求"></a>CORS跨域请求</h5><p>​        CORS（跨站资源共享），通过添加额外的http响应头，明确告诉浏览器可以接受来自某origin的跨域请求。</p>
+<p>​    <code>CORS</code>跨域分为两种请求，一种是<strong>简单请求</strong>，另外一种就是<strong>复杂请求</strong>。</p>
+<h6 id="简单请求："><a href="#简单请求：" class="headerlink" title="简单请求："></a>简单请求：</h6><ul>
+<li><p>GET、POST、HEAD（注：什么是HEAD请求？HEAD请求和GET本质是一样的，但是HEAD请求不含数据，只有HTTP头部信息）</p>
+</li>
+<li><p>HTTP头部信息限制</p>
+<ol>
+<li>无自定义头部字段</li>
+<li><code>Accept、Accept-Language、Content-Language、Last-Event-ID</code>等请求头， </li>
+<li>Content-Type（只有三个值<code>application/x-www-form-urlencoded</code>、<code>multipart/form-data</code>、<code>text/plain</code>）这里注意，<code>application/json</code> 为非简单请求</li>
+</ol>
+</li>
+<li><p>还有两个不常用坚定方法</p>
+<ol>
+<li>请求中的任意<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequestUpload" target="_blank" rel="noopener"><code>XMLHttpRequestUpload</code></a> 对象均没有注册任何事件监听器；<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequestUpload" target="_blank" rel="noopener"><code>XMLHttpRequestUpload</code></a> 对象可以使用 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/upload" target="_blank" rel="noopener"><code>XMLHttpRequest.upload</code></a> 属性访问。</li>
+<li>请求中没有使用 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/ReadableStream" target="_blank" rel="noopener"><code>ReadableStream</code></a> 对象。</li>
+</ol>
+<p>对于简单请求，可以让后端在服务器返回的时候增加允许</p>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">res.setHeader(<span class="string">'Access-Control-Allow-Origin'</span>,<span class="string">'*'</span>)</span><br></pre></td></tr></table></figure>
+
+<h6 id="非简单请求："><a href="#非简单请求：" class="headerlink" title="非简单请求："></a>非简单请求：</h6><ul>
+<li><p>请求方式：PUT、DELETE</p>
+</li>
+<li><p>自定义头部字段</p>
+</li>
+<li><p>发送json格式数据</p>
+</li>
+<li><p>正式通信之前，浏览器会先发送OPTION请求，进行预检，这一次的请求称为“<a href="https://www.jianshu.com/p/b55086cbd9af" target="_blank" rel="noopener">预检请求</a>”</p>
+<blockquote>
+<p>​        为什么要有预检：</p>
+<p>​        因为虽然是跨域请求，但是请求实际已经到达服务器，而只是在返回的过程中，被浏览器拦截而已，所以为了避免对服务器数据库产生负面影响，在可能会对数据库产生影响你的跨域请求时候，会首先发送options预检，合法之后才会继续进行下去</p>
+<p>​         chrome浏览器默认不显示预检option的请求，可以通过设置chrome://flags/#out-of-blink-cors</p>
+<p>disable的方式开启。</p>
+</blockquote>
+</li>
+<li><p>服务器成功响应预检请求后，才会发送真正的请求，并且携带真实数据<br>对于简单请求，可以通过设置服务器返回的时候的resHeader</p>
+</li>
+</ul>
+<p>​      对于非简单请求，可让后端，单独处理下预检请求，针对<code>options</code>请求做处理，添加请求头。第二个是针对请求中可能会带的自定义Header做专门允许操作。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">res.writeHead(<span class="number">200</span>,&#123;</span><br><span class="line">    <span class="string">'Access-Control-Allow-Origin'</span>:<span class="string">'www.xxx.com'</span>,<span class="comment">//这里一般不要设置*。除了安全方面考虑外，设置了*，  就算设置了允许Access-Control-Allow-Credentials：true，请求仍然会失败</span></span><br><span class="line">    <span class="string">'Access-Control-Allow-Headers'</span>:<span class="string">'*'</span>,</span><br><span class="line">    <span class="comment">// 'Access-Control-Allow-Methods':'*',</span></span><br><span class="line">&#125;)</span><br><span class="line">跨域请求中默认不会携带cookie，需要显是设置允许携带，这个时候还需要在<span class="string">`get`</span>请求添加</span><br><span class="line">res.setHeader(<span class="string">'Access-Control-Allow-Credentials'</span>, <span class="string">'true'</span>);</span><br><span class="line">但是带参数的post请求仍然无法访问，这里不知道为啥</span><br></pre></td></tr></table></figure>
+
+<h5 id="JSONP跨域"><a href="#JSONP跨域" class="headerlink" title="JSONP跨域"></a>JSONP跨域</h5><h5 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h5><h6 id="document-domain"><a href="#document-domain" class="headerlink" title="document.domain"></a>document.domain</h6><h6 id="window-postMessage"><a href="#window-postMessage" class="headerlink" title="window.postMessage"></a>window.postMessage</h6><p>​        在存在iframe的页面上，iframe页面和主页面之间的交互，需要使用postMessage方法。</p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/postMessage" target="_blank" rel="noopener">官方定义</a></p>
+<p><a href="www.caniuse.com">caniuse</a>上查询看出，postMessage的浏览器支持度还可以</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gdpnzko5eoj31tc0mkgpv.jpg" alt=""></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">otherWindow.post</span><br></pre></td></tr></table></figure>
+
+
+
+<p>​      </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/05/15/12.%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98%E5%85%A8%E9%9B%86/" data-id="cka7dmw2m0001z8eq0w8z8xjy" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/05/15/11.JavaScript%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          JavaScript缓存机制
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/05/15/10.%E6%B5%8F%E8%A7%88%E5%99%A8%E5%9C%B0%E5%9D%80%E6%A0%8F%E8%BE%93%E5%85%A5%E5%9C%B0%E5%9D%80%E4%B9%8B%E5%90%8E/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">浏览器地址输入url之后。。。</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/05/15/JavaScript%E4%B8%ADthis%E7%9A%84%E6%8C%87%E5%90%91%E9%97%AE%E9%A2%98/">7.JavaScript中this的指向问题</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/15/11.JavaScript%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/">JavaScript缓存机制</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/15/12.%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98%E5%85%A8%E9%9B%86/">JavaScript中的跨域问题</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/15/10.%E6%B5%8F%E8%A7%88%E5%99%A8%E5%9C%B0%E5%9D%80%E6%A0%8F%E8%BE%93%E5%85%A5%E5%9C%B0%E5%9D%80%E4%B9%8B%E5%90%8E/">浏览器地址输入url之后。。。</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/15/13.HTML5%20Web%20Worker/">HTML5 Web Worker</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script> -->
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

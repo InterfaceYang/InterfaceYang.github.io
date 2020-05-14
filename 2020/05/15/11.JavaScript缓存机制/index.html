@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>JavaScript缓存机制 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="JavaScript缓存分为强缓存和协商缓存 强缓存​        强缓存对比阶段根本没有发送http请求，直接通过对比强缓存字段，判断资源是否可用。在chrome中状态码为 200-from cache&#x2F;disk，如果命中，则直接使用缓存，如果没有命中，则进行下一步。 ​        强缓存字段主要包括：Expires过期时间和Cache-Control缓存控制。 ​        Expi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript缓存机制">
+<meta property="og:url" content="http://yoursite.com/2020/05/15/11.JavaScript%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="JavaScript缓存分为强缓存和协商缓存 强缓存​        强缓存对比阶段根本没有发送http请求，直接通过对比强缓存字段，判断资源是否可用。在chrome中状态码为 200-from cache&#x2F;disk，如果命中，则直接使用缓存，如果没有命中，则进行下一步。 ​        强缓存字段主要包括：Expires过期时间和Cache-Control缓存控制。 ​        Expi">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-05-14T22:53:11.000Z">
+<meta property="article:modified_time" content="2020-05-14T22:59:42.038Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <!-- <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css"> -->
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-11.JavaScript缓存机制" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/05/15/11.JavaScript%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/" class="article-date">
+  <time datetime="2020-05-14T22:53:11.000Z" itemprop="datePublished">2020-05-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      JavaScript缓存机制
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>JavaScript缓存分为强缓存和协商缓存</p>
+<h5 id="强缓存"><a href="#强缓存" class="headerlink" title="强缓存"></a>强缓存</h5><p>​        强缓存对比阶段根本没有发送http请求，直接通过对比强缓存字段，判断资源是否可用。在chrome中状态码为 200-from cache/disk，如果命中，则直接使用缓存，如果没有命中，则进行下一步。</p>
+<p>​        强缓存字段主要包括：<strong>Expires</strong>过期时间和<strong>Cache-Control</strong>缓存控制。</p>
+<p>​        <strong>Expires</strong>过期时间。是个0时区的date数据，new Date()。会跟本地时间进行对比，超过过期时间，则重新请求，获取新的资源。</p>
+<p>​        <strong>Cache-Control</strong>缓存控制。是http1.1新增的规则，用于控制网页缓存的字段。<strong>Cache-Control</strong>取值主要有：</p>
+<p>​                no-cache:不使用本地缓存，使用协商缓存</p>
+<p>​                no-store：直接禁止浏览器缓存数据</p>
+<p>​                public：终端浏览器缓存，也允许代理服务器缓存</p>
+<p>​                public：只有终端浏览器缓存，不允许代理服务器缓存</p>
+<p>​                max-age：设置最大缓存时间</p>
+<p>​                s-maxage 设置代理缓存</p>
+<p>​            <strong>pragma</strong></p>
+<p>​            <strong>cache的优先级要高于Expires</strong>，因为Expires时间返回的是服务器绝对时间，而客户顿时间是可以修改的，可以直接让缓存失效，而cache-control，是相对时间。</p>
+<h5 id="协商缓存"><a href="#协商缓存" class="headerlink" title="协商缓存"></a>协商缓存</h5><p>是根本根本没有发送请求，直接通过对比强缓存字段，判断资源是否可用。</p>
+<p>​        发送http请求之后，如果强缓存没有命中，则会继续对比请求头中的协商缓存的头，协商缓存命中，不返回资源，直接使用本地缓存，状态码<code>304 not-modify</code>。协商缓存的请求头主要包括Last-Modified和ETag字段。过程主要是：</p>
+<blockquote>
+<p>1，浏览器第一次跟服务器请求支援，服务器会添加Last—modified/Etag字段，指该资源最后的修改时间</p>
+<p>2，第二次请求，会在Request中携带If-modified-Since/If-none-Match字段，值为上次请求的Last-modified/Etag，</p>
+<p>浏览器会进行修改时间对比</p>
+<p>这里etag和lastmodified字段的生成和原理基本一致，主要不同是，当客户端返回304的时候，由于etag重新生成，所以reponse还是会把新的etag返回。</p>
+</blockquote>
+<p>​        两者对比，服务器会优先验证Etag，一致的情况下才会继续对比last-modified，最后才绝对是否返回304</p>
+<p>前人写的浏览器缓存方面的芝士</p>
+<p><a href="https://juejin.im/post/5e89fe22f265da47b924d032?utm_source=gold_browser_extension" target="_blank" rel="noopener">https://juejin.im/post/5e89fe22f265da47b924d032?utm_source=gold_browser_extension</a></p>
+<p>​        </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/05/15/11.JavaScript%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/" data-id="cka7dmw2f0000z8eq43ks5e3o" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/05/15/JavaScript%E4%B8%ADthis%E7%9A%84%E6%8C%87%E5%90%91%E9%97%AE%E9%A2%98/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          7.JavaScript中this的指向问题
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/05/15/12.%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98%E5%85%A8%E9%9B%86/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">JavaScript中的跨域问题</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/05/15/JavaScript%E4%B8%ADthis%E7%9A%84%E6%8C%87%E5%90%91%E9%97%AE%E9%A2%98/">7.JavaScript中this的指向问题</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/15/11.JavaScript%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/">JavaScript缓存机制</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/15/12.%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98%E5%85%A8%E9%9B%86/">JavaScript中的跨域问题</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/15/10.%E6%B5%8F%E8%A7%88%E5%99%A8%E5%9C%B0%E5%9D%80%E6%A0%8F%E8%BE%93%E5%85%A5%E5%9C%B0%E5%9D%80%E4%B9%8B%E5%90%8E/">浏览器地址输入url之后。。。</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/15/13.HTML5%20Web%20Worker/">HTML5 Web Worker</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script> -->
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

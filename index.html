@@ -100,6 +100,530 @@
 
 
   
+    <article id="post-11.JavaScript缓存机制" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/05/15/11.JavaScript%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/" class="article-date">
+  <time datetime="2020-05-14T22:53:11.000Z" itemprop="datePublished">2020-05-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/15/11.JavaScript%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/">JavaScript缓存机制</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>JavaScript缓存分为强缓存和协商缓存</p>
+<h5 id="强缓存"><a href="#强缓存" class="headerlink" title="强缓存"></a>强缓存</h5><p>​        强缓存对比阶段根本没有发送http请求，直接通过对比强缓存字段，判断资源是否可用。在chrome中状态码为 200-from cache/disk，如果命中，则直接使用缓存，如果没有命中，则进行下一步。</p>
+<p>​        强缓存字段主要包括：<strong>Expires</strong>过期时间和<strong>Cache-Control</strong>缓存控制。</p>
+<p>​        <strong>Expires</strong>过期时间。是个0时区的date数据，new Date()。会跟本地时间进行对比，超过过期时间，则重新请求，获取新的资源。</p>
+<p>​        <strong>Cache-Control</strong>缓存控制。是http1.1新增的规则，用于控制网页缓存的字段。<strong>Cache-Control</strong>取值主要有：</p>
+<p>​                no-cache:不使用本地缓存，使用协商缓存</p>
+<p>​                no-store：直接禁止浏览器缓存数据</p>
+<p>​                public：终端浏览器缓存，也允许代理服务器缓存</p>
+<p>​                public：只有终端浏览器缓存，不允许代理服务器缓存</p>
+<p>​                max-age：设置最大缓存时间</p>
+<p>​                s-maxage 设置代理缓存</p>
+<p>​            <strong>pragma</strong></p>
+<p>​            <strong>cache的优先级要高于Expires</strong>，因为Expires时间返回的是服务器绝对时间，而客户顿时间是可以修改的，可以直接让缓存失效，而cache-control，是相对时间。</p>
+<h5 id="协商缓存"><a href="#协商缓存" class="headerlink" title="协商缓存"></a>协商缓存</h5><p>是根本根本没有发送请求，直接通过对比强缓存字段，判断资源是否可用。</p>
+<p>​        发送http请求之后，如果强缓存没有命中，则会继续对比请求头中的协商缓存的头，协商缓存命中，不返回资源，直接使用本地缓存，状态码<code>304 not-modify</code>。协商缓存的请求头主要包括Last-Modified和ETag字段。过程主要是：</p>
+<blockquote>
+<p>1，浏览器第一次跟服务器请求支援，服务器会添加Last—modified/Etag字段，指该资源最后的修改时间</p>
+<p>2，第二次请求，会在Request中携带If-modified-Since/If-none-Match字段，值为上次请求的Last-modified/Etag，</p>
+<p>浏览器会进行修改时间对比</p>
+<p>这里etag和lastmodified字段的生成和原理基本一致，主要不同是，当客户端返回304的时候，由于etag重新生成，所以reponse还是会把新的etag返回。</p>
+</blockquote>
+<p>​        两者对比，服务器会优先验证Etag，一致的情况下才会继续对比last-modified，最后才绝对是否返回304</p>
+<p>前人写的浏览器缓存方面的芝士</p>
+<p><a href="https://juejin.im/post/5e89fe22f265da47b924d032?utm_source=gold_browser_extension" target="_blank" rel="noopener">https://juejin.im/post/5e89fe22f265da47b924d032?utm_source=gold_browser_extension</a></p>
+<p>​        </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/05/15/11.JavaScript%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/" data-id="cka7dmw2f0000z8eq43ks5e3o" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-12.跨域问题全集" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/05/15/12.%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98%E5%85%A8%E9%9B%86/" class="article-date">
+  <time datetime="2020-05-14T22:53:11.000Z" itemprop="datePublished">2020-05-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/15/12.%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98%E5%85%A8%E9%9B%86/">JavaScript中的跨域问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="跨域问题的由来"><a href="#跨域问题的由来" class="headerlink" title="跨域问题的由来"></a>跨域问题的由来</h4><p>​        主要是因为网络通信同源策略的原因。网络通信同源策略：计算机通信过程中，非同源页面不能相互访问数据，所谓非同源是指，协议，域名，端口号，三者有一个不同。</p>
+<p>​        之所以有同源策略是考虑到安全方面，考虑到用户的隐私。最根本原因是因为通信协议的无状态话，服务器也不知道这个网络请求来自何处。可以添加<code>referer</code>请求头标记网页来源，但是不能保证每个服务器后端都会参照字段进行识别，并且虽然前端无法修改<code>referer</code>请求头，但是可以通过搭建nginx代理设置’<code>proxy_set_header referer&#39;</code></p>
+<h4 id="跨域问题的解决方案"><a href="#跨域问题的解决方案" class="headerlink" title="跨域问题的解决方案"></a>跨域问题的解决方案</h4><h5 id="CORS跨域请求"><a href="#CORS跨域请求" class="headerlink" title="CORS跨域请求"></a>CORS跨域请求</h5><p>​        CORS（跨站资源共享），通过添加额外的http响应头，明确告诉浏览器可以接受来自某origin的跨域请求。</p>
+<p>​    <code>CORS</code>跨域分为两种请求，一种是<strong>简单请求</strong>，另外一种就是<strong>复杂请求</strong>。</p>
+<h6 id="简单请求："><a href="#简单请求：" class="headerlink" title="简单请求："></a>简单请求：</h6><ul>
+<li><p>GET、POST、HEAD（注：什么是HEAD请求？HEAD请求和GET本质是一样的，但是HEAD请求不含数据，只有HTTP头部信息）</p>
+</li>
+<li><p>HTTP头部信息限制</p>
+<ol>
+<li>无自定义头部字段</li>
+<li><code>Accept、Accept-Language、Content-Language、Last-Event-ID</code>等请求头， </li>
+<li>Content-Type（只有三个值<code>application/x-www-form-urlencoded</code>、<code>multipart/form-data</code>、<code>text/plain</code>）这里注意，<code>application/json</code> 为非简单请求</li>
+</ol>
+</li>
+<li><p>还有两个不常用坚定方法</p>
+<ol>
+<li>请求中的任意<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequestUpload" target="_blank" rel="noopener"><code>XMLHttpRequestUpload</code></a> 对象均没有注册任何事件监听器；<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequestUpload" target="_blank" rel="noopener"><code>XMLHttpRequestUpload</code></a> 对象可以使用 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/upload" target="_blank" rel="noopener"><code>XMLHttpRequest.upload</code></a> 属性访问。</li>
+<li>请求中没有使用 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/ReadableStream" target="_blank" rel="noopener"><code>ReadableStream</code></a> 对象。</li>
+</ol>
+<p>对于简单请求，可以让后端在服务器返回的时候增加允许</p>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">res.setHeader(<span class="string">'Access-Control-Allow-Origin'</span>,<span class="string">'*'</span>)</span><br></pre></td></tr></table></figure>
+
+<h6 id="非简单请求："><a href="#非简单请求：" class="headerlink" title="非简单请求："></a>非简单请求：</h6><ul>
+<li><p>请求方式：PUT、DELETE</p>
+</li>
+<li><p>自定义头部字段</p>
+</li>
+<li><p>发送json格式数据</p>
+</li>
+<li><p>正式通信之前，浏览器会先发送OPTION请求，进行预检，这一次的请求称为“<a href="https://www.jianshu.com/p/b55086cbd9af" target="_blank" rel="noopener">预检请求</a>”</p>
+<blockquote>
+<p>​        为什么要有预检：</p>
+<p>​        因为虽然是跨域请求，但是请求实际已经到达服务器，而只是在返回的过程中，被浏览器拦截而已，所以为了避免对服务器数据库产生负面影响，在可能会对数据库产生影响你的跨域请求时候，会首先发送options预检，合法之后才会继续进行下去</p>
+<p>​         chrome浏览器默认不显示预检option的请求，可以通过设置chrome://flags/#out-of-blink-cors</p>
+<p>disable的方式开启。</p>
+</blockquote>
+</li>
+<li><p>服务器成功响应预检请求后，才会发送真正的请求，并且携带真实数据<br>对于简单请求，可以通过设置服务器返回的时候的resHeader</p>
+</li>
+</ul>
+<p>​      对于非简单请求，可让后端，单独处理下预检请求，针对<code>options</code>请求做处理，添加请求头。第二个是针对请求中可能会带的自定义Header做专门允许操作。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">res.writeHead(<span class="number">200</span>,&#123;</span><br><span class="line">    <span class="string">'Access-Control-Allow-Origin'</span>:<span class="string">'www.xxx.com'</span>,<span class="comment">//这里一般不要设置*。除了安全方面考虑外，设置了*，  就算设置了允许Access-Control-Allow-Credentials：true，请求仍然会失败</span></span><br><span class="line">    <span class="string">'Access-Control-Allow-Headers'</span>:<span class="string">'*'</span>,</span><br><span class="line">    <span class="comment">// 'Access-Control-Allow-Methods':'*',</span></span><br><span class="line">&#125;)</span><br><span class="line">跨域请求中默认不会携带cookie，需要显是设置允许携带，这个时候还需要在<span class="string">`get`</span>请求添加</span><br><span class="line">res.setHeader(<span class="string">'Access-Control-Allow-Credentials'</span>, <span class="string">'true'</span>);</span><br><span class="line">但是带参数的post请求仍然无法访问，这里不知道为啥</span><br></pre></td></tr></table></figure>
+
+<h5 id="JSONP跨域"><a href="#JSONP跨域" class="headerlink" title="JSONP跨域"></a>JSONP跨域</h5><h5 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h5><h6 id="document-domain"><a href="#document-domain" class="headerlink" title="document.domain"></a>document.domain</h6><h6 id="window-postMessage"><a href="#window-postMessage" class="headerlink" title="window.postMessage"></a>window.postMessage</h6><p>​        在存在iframe的页面上，iframe页面和主页面之间的交互，需要使用postMessage方法。</p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/postMessage" target="_blank" rel="noopener">官方定义</a></p>
+<p><a href="www.caniuse.com">caniuse</a>上查询看出，postMessage的浏览器支持度还可以</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gdpnzko5eoj31tc0mkgpv.jpg" alt=""></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">otherWindow.post</span><br></pre></td></tr></table></figure>
+
+
+
+<p>​      </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/05/15/12.%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98%E5%85%A8%E9%9B%86/" data-id="cka7dmw2m0001z8eq0w8z8xjy" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-10.浏览器地址栏输入地址之后" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/05/15/10.%E6%B5%8F%E8%A7%88%E5%99%A8%E5%9C%B0%E5%9D%80%E6%A0%8F%E8%BE%93%E5%85%A5%E5%9C%B0%E5%9D%80%E4%B9%8B%E5%90%8E/" class="article-date">
+  <time datetime="2020-05-14T22:53:11.000Z" itemprop="datePublished">2020-05-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/15/10.%E6%B5%8F%E8%A7%88%E5%99%A8%E5%9C%B0%E5%9D%80%E6%A0%8F%E8%BE%93%E5%85%A5%E5%9C%B0%E5%9D%80%E4%B9%8B%E5%90%8E/">浏览器地址输入url之后。。。</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>地址栏输入URL会发生什么，这个题目，可以说一年。</p>
+<p>​                                                                                        ——尼古拉斯·鲁</p>
+</blockquote>
+<h5 id="对比本地浏览器缓存"><a href="#对比本地浏览器缓存" class="headerlink" title="对比本地浏览器缓存"></a>对比本地浏览器缓存</h5><p>​        浏览器根据域名，在本地缓存中寻找是否已经访问过，如果访问过，再走强缓存和协商缓存那一套，强缓存，对比过期时间，在合适情况下直接显示当前页面。</p>
+<h5 id="根据规则解析url"><a href="#根据规则解析url" class="headerlink" title="根据规则解析url"></a>根据规则解析url</h5><p>​        以 <a href="http://news.baidu.com:80/internet为例，" target="_blank" rel="noopener">http://news.baidu.com:80/internet为例，</a></p>
+<p>​        协议部分:<code>http</code></p>
+<p>​        域名部分：<code>news.baidu.com</code></p>
+<p>​        端口：80</p>
+<p>​        虚拟目录：/internet</p>
+<p>​        根据规则，浏览器组装一个HTTP（Get）请求报文，将输入的域名进行解析，取得域名部分</p>
+<p>​        return { http的请求报文 }</p>
+<h5 id="DNS解析过程"><a href="#DNS解析过程" class="headerlink" title="DNS解析过程"></a>DNS解析过程</h5><p>​                虽然上一步中，得到了news.baidu.com域名，但是浏览器是不知道主机在哪的，更无从建立连接和发送请求，因此建立连接的的第一步是通过dns寻址服务，找到域名的目标主机ip（这里不考虑集群cdn等）</p>
+<p>​        DNS解析是逐级解析的，过程梳理如下</p>
+<ul>
+<li><p>检查浏览器缓存</p>
+</li>
+<li><p>检查内存中dns缓存</p>
+</li>
+<li><p>查看本地host文件的修改</p>
+</li>
+<li><p>检查路由器中dns缓存</p>
+</li>
+<li><p>检查本地isp电信提供商的dns缓存</p>
+<p>如果上述缓存中都没有该域名的解析缓存，则逐步向上，直到根目录服务器。这个过程主要有迭代查询和递归查询:</p>
+<p>迭代查询：操作系统向dns服务器查询解析记录，如果没有，dns服务器向操作系统返回其他dns服务器。</p>
+<p>递归查询：操作系统向dns服务器查询解析记录，服务器如果没有，则自发查询其他dns服务器的dns记录，最后总会想操作系统返回dns解析记录。</p>
+<p>一般，两种查询过程交互存在。从客户端到本地服务器属于递归查询，而DNS服务器之间的交互属于迭代查询。</p>
+</li>
+</ul>
+<h5 id="TCP三次握手"><a href="#TCP三次握手" class="headerlink" title="TCP三次握手"></a>TCP三次握手</h5><p>​        根据上个步骤中获得的IP地址，浏览器发送Http请求，由于http请求是应用层的协议，因此依赖处于传输层的TCP/IP协议。</p>
+<p>​        <img src="C:%5CUsers%5C17112598%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200331213422976.png" alt="image-20200331213422976"></p>
+<p>TCP/IP的三次握手：</p>
+<ul>
+<li><p>首先client发起请求，将自身SYN=1.发送seq=x到服务端，发送后，自身状态编程SYN-SEND状态</p>
+</li>
+<li><p>服务器Server接受到C发送过来的seq报文，将自身的SYN = 1 ACK =1 同时将将自身状态编程SYN-RECEIVED状态，，同时向C发送seq = 1，ack = x+1 的报文</p>
+</li>
+<li><p>客户端C接受到S发送过来的seq和ack报文，将自身ack= 1，同时自身状态置为ESTABLISHED ，同时向S发送seq = x+1，ack= y+1的报文</p>
+</li>
+<li><p>服务器S接收到客户端的seq和ack报文，将自身状态置为ESTABLISHED </p>
+<p>SYN和ACK状态解释：</p>
+<ol>
+<li><p><strong>ACK</strong>：确认标识，用于表示对数据包的成功接收。ACK置为1，表示已经收到seq=x的报文，且已经发还 ack = x+1的报文返回，这里的x是指对方刚才发过来的随机数seq的值</p>
+</li>
+<li><p><strong>SYN</strong>：同步标识，表示TCP连接已初始化。</p>
+</li>
+<li><p><strong>FIN</strong>：完成标识，用于拆除上一个SYN标识。</p>
+<p>三次握手的目的有两点：</p>
+<ol>
+<li>​    确认c和s双方都有发送和接受消息的能力，避免无效的链接</li>
+<li>避免已失效的请求连接的报文段传到服务端，服务端浪费网络连接数一直等待客户端</li>
+</ol>
+<p>经过三次握手，tcp链接已经建立，可以进行http请求了。</p>
+</li>
+</ol>
+</li>
+</ul>
+<h5 id="Http请求"><a href="#Http请求" class="headerlink" title="Http请求"></a>Http请求</h5><p>​        后端从在固定的端口接收到TCP报文开始，它会对TCP连接进行处理，对HTTP协议进行解析，并按照报文格式进一步封装成HTTP Request对象，供上层使用。http属于应用层的协议，因此tcp层的一系列重传，留空等跟http协议无关</p>
+<p>​        这里主要是将请求分发到代理服务器，例如nginx服务器进行负载均衡等</p>
+<p>​        http协议中。Request主要包括，</p>
+<p>​            请求行：Method：GET、POST等 RequestUrl：<a href="https://www.baidu.com" target="_blank" rel="noopener">https://www.baidu.com</a></p>
+<p>​                            HttpVersion:Http1.1</p>
+<p>​            消息报头: Accept Accept-Charset等</p>
+<p>​            请求正文：请求内容</p>
+<h5 id="Http响应"><a href="#Http响应" class="headerlink" title="Http响应"></a>Http响应</h5><p>​         经过上述一系列过程，服务器接受到客户端发送的的http请求，返回所需要的文档。</p>
+<p>​        http协议中，Response主要包括，</p>
+<p>​            状态行：状态码（1XX继续进行，2XX成功，3XX重定向相关，4XX浏览器                            错误，5XX服务器错误）</p>
+<p>​            消息报头：响应报头（location 、Server），实体报头（Content-Type                                等）</p>
+<p>​            响应正文：文档</p>
+<p>​        return {文档}</p>
+<h5 id="页面渲染"><a href="#页面渲染" class="headerlink" title="页面渲染"></a><strong>页面渲染</strong></h5><p>​        根据上个步骤中返回的文档，浏览器进行渲染。</p>
+<p><a href="https://juejin.im/post/5e8ec67ce51d4546fd4813d3" target="_blank" rel="noopener">浅谈浏览器渲染、回流和重绘</a></p>
+<blockquote>
+<p>构建DOM -&gt; 构建CSSOM -&gt; 构建渲染树 -&gt; 布局 -&gt; 绘制</p>
+</blockquote>
+<ol>
+<li><p>​    HTML和CSS经过各自解析，生成DOM树和CSSOM树</p>
+</li>
+<li><p>​    合并成为渲染树</p>
+</li>
+<li><p>根据渲染树进行布局</p>
+</li>
+<li><p>最后调用GPU进行绘制，显示在屏幕上。</p>
+<h6 id="根据浏览器渲染机制加快首屏速度"><a href="#根据浏览器渲染机制加快首屏速度" class="headerlink" title="根据浏览器渲染机制加快首屏速度"></a>根据浏览器渲染机制加快首屏速度</h6><ul>
+<li>HTML和CSS的加载和解析都会阻塞渲染树的生成，因此优化大小，减少css层级，可以加快首屏速度</li>
+<li>浏览器解析到<script>标签时，会阻塞文档解析。因此我们通常把<script>标签放在底部，或者加上<code>defer、async</code>来进行异步下载</li>
+</ul>
+<h6 id="页面重绘与回流"><a href="#页面重绘与回流" class="headerlink" title="页面重绘与回流"></a>页面重绘与回流</h6><p>​        当元素的样式发生变化时，浏览器需要触发更新，重新绘制元素。这个过程中，有两种类型的操作，即重绘与回流</p>
+<p>​        <strong>重绘(repaint)</strong>: 当元素样式的改变不影响布局时，浏览器将使用重绘对元素进行更新，此时由于只需要UI层面的重新像素绘制，因此损耗较少</p>
+<p>​        <strong>回流(reflow):</strong> 当元素的尺寸、结构或触发某些属性时，浏览器会重新渲染页面，称为回流。此时，浏览器需要重新经过计算，计算后还需要重新页面布局，因此是较重的操作。</p>
+<h6 id="会触发回流的操作"><a href="#会触发回流的操作" class="headerlink" title="会触发回流的操作:"></a>会触发回流的操作:</h6><ol>
+<li><p>添加或删除可见的DOM元素</p>
+</li>
+<li><p>元素的位置发生变化</p>
+</li>
+<li><p>元素的尺寸发生变化（包括外边距、内边框、边框大小、高度和宽度等）</p>
+</li>
+<li><p>内容发生变化，比如文本变化或图片被另一个不同尺寸的图片所替代。</p>
+</li>
+<li><p>页面一开始渲染的时候（这肯定避免不了）</p>
+</li>
+<li><p>浏览器的窗口尺寸变化（因为回流是根据视口的大小来计算元素的位置和大小的</p>
+</li>
+</ol>
+<h6 id="根据以上原则，可以基于重绘和回流做性能优化："><a href="#根据以上原则，可以基于重绘和回流做性能优化：" class="headerlink" title="根据以上原则，可以基于重绘和回流做性能优化："></a>根据以上原则，可以基于重绘和回流做性能优化：</h6><p>  css方面</p>
+<ul>
+<li>避免使用table布局</li>
+<li>使用<code>class</code>替代<code>style</code>，减少style的使用</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li><p>使用<code>visibility</code>替换<code>display: none</code>，因为前者只会引起重绘，后者会引发回流</p>
+<pre><code>- 将动画效果应用到position属性为absolute或fixed的元素上
+
+ javascript
+
+- 避免频繁操作样式，可汇总后统一 一次修改
+
+- 尽量使用class进行样式修改
+
+- 减少dom的增删次数，可使用 字符串 或者 documentFragment 一次性插入
+
+- 极限优化时，修改样式可将其display: none后修改
+
+- 避免多次触发上面提到的那些会触发回流的方法，可以的话尽量用 变量存住</code></pre></li>
+</ul>
+<p>  ​      </p>
+<h5 id="TCP四次挥手"><a href="#TCP四次挥手" class="headerlink" title="TCP四次挥手"></a>TCP四次挥手</h5><p>​        现在浏览器为了提高连接性能，一般都会保持连接，keep-alive模式，因此四次挥手一般发生在关闭浏览器标签页的时候。四次挥手是全双工的，连接双方都可以主动关闭，不过一般是由客户端发起关闭请求、</p>
+<blockquote>
+<ol>
+<li>客户端发送一个FIN置为1的包，ack = y， seq = x + 1，此时客户端的状态为 <strong>FIN_WAIT_1</strong></li>
+<li>服务端收到包后，状态切换为<strong>CLOSE_WAIT</strong>发送一个ACK为1的包， ack = x + 2。客户端收到包之后状态切换为<strong>FNI_WAIT_2</strong></li>
+<li>服务端处理完任务后，向客户端发送一个 FIN包，seq = y; 同时将自己的状态置为<strong>LAST_ACK</strong></li>
+<li>客户端收到包后状态切换为<strong>TIME_WAIT</strong>，并向服务端发送ACK包，ack = y + 1，等待2MSL后关闭连接。</li>
+</ol>
+</blockquote>
+<p>​        </p>
+<p>​        </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/05/15/10.%E6%B5%8F%E8%A7%88%E5%99%A8%E5%9C%B0%E5%9D%80%E6%A0%8F%E8%BE%93%E5%85%A5%E5%9C%B0%E5%9D%80%E4%B9%8B%E5%90%8E/" data-id="cka7dmw2n0002z8eq5x8chl3b" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-13.HTML5 Web Worker" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/05/15/13.HTML5%20Web%20Worker/" class="article-date">
+  <time datetime="2020-05-14T22:53:11.000Z" itemprop="datePublished">2020-05-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/15/13.HTML5%20Web%20Worker/">HTML5 Web Worker</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="https://juejin.im/post/59c1b3645188250ea1502e46" target="_blank" rel="noopener">Web WORK</a></p>
+<h5 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h5><p>​        由于js的单线程特性，js脚本运行时间过长会导致页面无响应，因此可以使用HTML新特性WebWork，在里面执行耗时时间比较长的脚本，再通过postMessage，将运行结果传给主进程。主页面通过onMessage接受传递的参数</p>
+<p>代码示例</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webWork.js</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">say</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> arr = <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="built_in">Math</span>.pow(<span class="number">2</span>,<span class="number">20</span>)).fill(<span class="built_in">Math</span>.random()) <span class="comment">//脚本运行时间很长</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span> ;i&lt; arr.length; i++) &#123;</span><br><span class="line">        setTimeout(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">            postMessage(arr[i])</span><br><span class="line">        &#125;,<span class="number">100</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">say()</span><br><span class="line"></span><br><span class="line"><span class="comment">//main.js</span></span><br><span class="line"><span class="keyword">var</span> myWorker = <span class="keyword">new</span> Worker(<span class="string">"we.js"</span>); <span class="comment">//开启webWork子进程</span></span><br><span class="line">myWorker.onmessage = <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;  <span class="comment">// 通过onmessage接受webwork传过来的东西</span></span><br><span class="line">    <span class="built_in">console</span>.log(e)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/05/15/13.HTML5%20Web%20Worker/" data-id="cka7dmw2o0003z8eq7jjyfp4a" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-13.网络协议" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/05/15/13.%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" class="article-date">
+  <time datetime="2020-05-14T22:53:11.000Z" itemprop="datePublished">2020-05-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/15/13.%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/">网络协议</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="网络协议"><a href="#网络协议" class="headerlink" title="网络协议"></a>网络协议</h1>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/05/15/13.%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" data-id="cka7dmw2p0004z8eqb8cqcj76" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-8.JavaScript继承" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/05/15/8.JavaScript%E7%BB%A7%E6%89%BF/" class="article-date">
+  <time datetime="2020-05-14T22:53:11.000Z" itemprop="datePublished">2020-05-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/15/8.JavaScript%E7%BB%A7%E6%89%BF/">JavaScript集成</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h5 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h5><p>​        在了解js的继承之前，需要搞清楚几个概念，亦或者属性，方便之后的讲解、</p>
+<p><code>prototype</code>：每个函数被new出来都有<code>prototype</code>属性，既函数的类有<code>protytype</code>属性<br><code>proto</code>：所有对象都包含一个<code>__proto__</code>属性指向它的构造函数的<code>prototype</code>。<br><code>constructor</code>：所有对象都包含<code>constructor</code>属性,这个属性包含一个指向<code>prototype</code>属性所在函数的指针。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Fn = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line"><span class="keyword">var</span> fn = <span class="keyword">new</span> Fn()</span><br><span class="line"></span><br><span class="line">Fn.prototype === fn.__proto__    <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="正式内容"><a href="#正式内容" class="headerlink" title="正式内容"></a>正式内容</h5><p>​        js在es6之前甚至没有类的概念，在实现继承的时候依据原型链原则。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这是个祖元素</span></span><br><span class="line"><span class="keyword">var</span> Person = <span class="function"><span class="keyword">function</span>(<span class="params">name =<span class="string">"defaultName"</span>, gifts = [<span class="string">'eat'</span>,<span class="string">'reading'</span>] </span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name;</span><br><span class="line">    <span class="keyword">this</span>.gifts = gifts;</span><br><span class="line">    <span class="keyword">this</span>.introduce = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'my name is '</span>,name)</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'my gifts is '</span>,gifts)</span><br><span class="line">        <span class="comment">//return name</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 添加原型链方法</span></span><br><span class="line">Person.prototype.eat = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'i am eatting'</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h6 id="一、继承，使用原型链继承"><a href="#一、继承，使用原型链继承" class="headerlink" title="一、继承，使用原型链继承"></a>一、继承，使用原型链继承</h6><p>​        将父类的实例作为子类的原型</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 初始化子元素</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Student</span>(<span class="params">grade</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.grade = grade</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//讲Student的原型链指向需要继承父类的实例上，就可以实现集成</span></span><br><span class="line">Student.prototype = <span class="keyword">new</span> Person()</span><br><span class="line"><span class="comment">//实例化子元素</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> student = <span class="keyword">new</span> Student(<span class="string">'grade1'</span>)</span><br><span class="line"></span><br><span class="line">student.introduce()</span><br><span class="line">student.eat()</span><br></pre></td></tr></table></figure>
+
+<p>缺点：</p>
+<ol>
+<li>共享父类的属性，如果一个子类修改，其他也会修改，这不符合预期</li>
+<li>无法向父类方法传参，即没有办法给name赋值。</li>
+</ol>
+<h6 id="二、使用构造方式的函数"><a href="#二、使用构造方式的函数" class="headerlink" title="二、使用构造方式的函数"></a>二、使用构造方式的函数</h6><p>​        使用构造函数的方法实现继承，主要是在子类内部执行父类的构造方法，并且将在子类中利用call方法改变this指向，实现继承。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Student</span>(<span class="params">name,gifts</span>) </span>&#123;</span><br><span class="line">    Person.call(<span class="keyword">this</span>, name,gifts)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> st1 = <span class="keyword">new</span> Student(<span class="string">'tom'</span>, [<span class="string">'catching mouse'</span>])</span><br><span class="line"><span class="keyword">let</span> st2 = <span class="keyword">new</span> Student(<span class="string">'jerry'</span>, [<span class="string">'dring milk'</span>])</span><br><span class="line"></span><br><span class="line">st1.introduce()</span><br><span class="line"><span class="comment">//st1.eat()</span></span><br><span class="line">st2.introduce()</span><br><span class="line"><span class="comment">//st2.eat()</span></span><br></pre></td></tr></table></figure>
+
+<p>缺点：可以看到，这种方法无法实现原型链上的方法的继承。eat方法执行时会报错</p>
+<h6 id="三，使用组合方式实现js的继承"><a href="#三，使用组合方式实现js的继承" class="headerlink" title="三，使用组合方式实现js的继承"></a>三，使用组合方式实现js的继承</h6><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Student</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">    Person.call(<span class="keyword">this</span>,...arguments)</span><br><span class="line">&#125;</span><br><span class="line">Student.prototype = Person.prototype</span><br></pre></td></tr></table></figure>
+
+<p>组合使用原型链继承和构造函数继承方法，</p>
+<p>将Studen之类的prototype指向Person的prototype，</p>
+<p>在子类内部通过call将改变this的执行</p>
+<p>缺点：通过Student构造函数new出来的实例，student.__proto.constructor.name == Person，显然这不符合预期</p>
+<h6 id="四，寄生组合继承"><a href="#四，寄生组合继承" class="headerlink" title="四，寄生组合继承"></a>四，寄生组合继承</h6><p>既然通过组合方式实现js继承无法维护之类的构造函数，那么，在组合完之后，将<code>_proto_.constructo</code>r修改一下不就得了，于是有了终极方案：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Student</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">    Person.call(<span class="keyword">this</span>,...arguments)</span><br><span class="line">&#125;</span><br><span class="line">Student.prototype = <span class="built_in">Object</span>.create(Person.prototype)</span><br><span class="line"><span class="comment">// 然后_proto.constructor指向Student就可以了。</span></span><br><span class="line">Son.prototype.constructor = Son;</span><br></pre></td></tr></table></figure>
+
+<h6 id="五，ES6的extend方法"><a href="#五，ES6的extend方法" class="headerlink" title="五，ES6的extend方法"></a>五，ES6的extend方法</h6><p>前人写的集成方面的好文</p>
+<p><a href="https://juejin.im/post/5e8aa20651882573a343d089?utm_source=gold_browser_extension" target="_blank" rel="noopener">https://juejin.im/post/5e8aa20651882573a343d089?utm_source=gold_browser_extension</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/05/15/8.JavaScript%E7%BB%A7%E6%89%BF/" data-id="cka7dmw2q0005z8eqfe1e968t" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-9.JavaScript中new关键字" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/05/15/9.JavaScript%E4%B8%ADnew%E5%85%B3%E9%94%AE%E5%AD%97/" class="article-date">
+  <time datetime="2020-05-14T22:53:11.000Z" itemprop="datePublished">2020-05-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/15/9.JavaScript%E4%B8%ADnew%E5%85%B3%E9%94%AE%E5%AD%97/">JavaScript中new关键字解析</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p><strong><code>new</code> 运算符</strong>创建一个用户定义的对象类型的实例或具有构造函数的内置对象的实例。<strong><code>new</code></strong> 关键字会进行如下的操作：</p>
+<ol>
+<li><p>创建一个空的简单JavaScript对象（即<code>{}</code>）；</p>
+</li>
+<li><p>链接该对象（即设置该对象的构造函数）到另一个对象 ；</p>
+</li>
+<li><p>将步骤1新创建的对象作为<code>this</code>的上下文 ；</p>
+</li>
+<li><p>如果该函数没有返回对象，则返回<code>this</code></p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/new" target="_blank" rel="noopener">引入自MDN</a></p>
+</li>
+</ol>
+</blockquote>
+<h5 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.name = name;</span><br><span class="line">	sayhello= <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">'this name is '</span>, name)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> person = <span class="keyword">new</span> Person(<span class="string">'tom'</span>)</span><br><span class="line"><span class="comment">//这里初始化Person的过程中，new关键字主要做了三步</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">_new</span> (<span class="params">Fn, ...args</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> p = &#123;&#125; <span class="comment">// let p = Object.create(&#123;&#125;)                   // 初始化一个新对象</span></span><br><span class="line">    p.__proto__ = Fn.prototype;   <span class="comment">//链接这个空对象到需要初始化的构造函数的原型链上</span></span><br><span class="line">	<span class="keyword">let</span> result=  Person.apply(p,args) <span class="comment">//链接这个空对象到需要初始化的构造函数的原型链上</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">typeof</span> result === <span class="string">'object'</span>  ? result :p  <span class="comment">// 通过call方法，将方法都绑定到上边的p对象中</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> _newPerson = _new(Person,<span class="string">'Tom'</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/05/15/9.JavaScript%E4%B8%ADnew%E5%85%B3%E9%94%AE%E5%AD%97/" data-id="cka7dmw2s0006z8eq2c0pfkzs" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-JavaScript中call和apply的应用" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/05/15/JavaScript%E4%B8%ADcall%E5%92%8Capply%E7%9A%84%E5%BA%94%E7%94%A8/" class="article-date">
@@ -205,283 +729,12 @@
 
 
   
-    <article id="post-JavaScript中事件执行顺序" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/05/15/JavaScript%E4%B8%AD%E4%BA%8B%E4%BB%B6%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F/" class="article-date">
-  <time datetime="2020-05-14T16:44:30.000Z" itemprop="datePublished">2020-05-15</time>
-</a>
+
+
+  <nav id="page-nav">
     
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/15/JavaScript%E4%B8%AD%E4%BA%8B%E4%BB%B6%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F/">JavaScript中事件执行顺序</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>JavaScript作为单线程语言的代表，在处理复杂事件时，采用的是回调的方</p>
-<h3 id="用setTimeout来实现setInterval"><a href="#用setTimeout来实现setInterval" class="headerlink" title="用setTimeout来实现setInterval"></a>用setTimeout来实现setInterval</h3><p>setInterval可以保证固定时间间隔将要执行的事件推到事件的执行队列，但是如果这个事件执行需要很长时间，而在推入时间执行队列时候，还没有完成，这就容易造成事件的堆积。程序连续运行好几次，而之间没有间隔</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">say</span>(<span class="params">dealy</span>)</span>&#123;</span><br><span class="line">  <span class="comment">//something</span></span><br><span class="line">   <span class="built_in">console</span>.log(<span class="string">'helloworld'</span>,<span class="keyword">new</span> <span class="built_in">Date</span>().toString())</span><br><span class="line">  setTimeout(say,dealy);</span><br><span class="line">&#125;</span><br><span class="line">setTimeout(say,dealy)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">   <span class="built_in">console</span>.log(<span class="string">'helloworld'</span>,<span class="keyword">new</span> <span class="built_in">Date</span>().toString())</span><br><span class="line">   setTimeout(<span class="built_in">arguments</span>.callee,<span class="number">200</span>);</span><br><span class="line">&#125;,<span class="number">200</span>);</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/05/15/JavaScript%E4%B8%AD%E4%BA%8B%E4%BB%B6%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F/" data-id="cka706h0e0004nieq77h7fnyr" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-JavaScript的执行上下文和作用域" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/05/15/JavaScript%E7%9A%84%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E5%92%8C%E4%BD%9C%E7%94%A8%E5%9F%9F/" class="article-date">
-  <time datetime="2020-05-14T16:44:18.000Z" itemprop="datePublished">2020-05-15</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/15/JavaScript%E7%9A%84%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E5%92%8C%E4%BD%9C%E7%94%A8%E5%9F%9F/">JavaScript的执行上下文和作用域</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h5 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h5><p>​    JavaScript作用域是指函数运行时，变量的有效区间，落到函数运行范畴上，是指JavaScript的执行上下文，变量作为执行上下文区间的本地变量。</p>
-<p>可以分为全局，函数以及eval上下文</p>
-<ul>
-<li><p>全局上下文</p>
-<p>​        全局上下文只有一个，是指整个JavaScript运行时。当执行JavaScript文件的时候，会将全局上下午压到当前的执行栈，this默认指想window对象</p>
-</li>
-<li><p>函数上下文</p>
-<p>​        函数作用域是在函数执行的时候创建的函数执行上下文，this指向默认指向执行该函数的对象，可通过bind，apply等改变指向。当JavaScript执行引擎执行到函数的时候，会把函数上下文继续压到当前的执行栈</p>
-</li>
-<li><p>eval上下文</p>
-<p>​        eval函数也会产生新的作用域即函数执行上下文。</p>
-</li>
-</ul>
-<h5 id="执行栈管理过程即函数执行过程"><a href="#执行栈管理过程即函数执行过程" class="headerlink" title="执行栈管理过程即函数执行过程"></a>执行栈管理过程即函数执行过程</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//1，首先JavaScript引擎创建全局上下文，并且将其压入到当前执行栈</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//2，遇到函数，函数执行会生成自己的函数执行上下文，将函数上下文压入到当前执行栈</span></span><br><span class="line"><span class="comment">// 函数执行的标志是在函数名后边有（），即为函数执行的讯号。</span></span><br><span class="line"></span><br><span class="line">first()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">first</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'i am first'</span>)</span><br><span class="line">    <span class="comment">// 3,又遇到了函数，继续生成属于自己的执行上下文，继续压入当前执行栈</span></span><br><span class="line">    sencod()</span><br><span class="line">    <span class="comment">// 4，sencod函数执行完毕，推出执行栈，这个执行上下文被删除，所有本地变量也无效。</span></span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//5，first函数执行完毕，推出执行栈</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sencod</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  	<span class="keyword">let</span> str = <span class="string">"hello"</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'i am sencod'</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'i am outside'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出</span></span><br><span class="line"><span class="comment">// console.log('i am first'）=&gt; console.log('i am sencod'）=&gt; console.log('i am outside'）</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">first()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">first</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'i am first'</span>)</span><br><span class="line">    sencod()</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sencod</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'i am sencod'</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"> 		<span class="built_in">console</span>.log(<span class="string">'i am third'</span>)       </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h5 id="JavaScript创建执行栈过程"><a href="#JavaScript创建执行栈过程" class="headerlink" title="JavaScript创建执行栈过程"></a>JavaScript创建执行栈过程</h5><p>​        执行上下文有两个阶段：创建阶段和执行阶段</p>
-<h6 id="创建阶段："><a href="#创建阶段：" class="headerlink" title="创建阶段："></a>创建阶段：</h6><ol>
-<li>this值的决定，即this绑定</li>
-<li>创建<strong>词法环境</strong></li>
-<li>创建<strong>变量环境</strong></li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/05/15/JavaScript%E7%9A%84%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E5%92%8C%E4%BD%9C%E7%94%A8%E5%9F%9F/" data-id="cka7067v60003nieq6qweg7f2" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-JavaScript类型转换" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/05/15/JavaScript%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/" class="article-date">
-  <time datetime="2020-05-14T16:44:08.000Z" itemprop="datePublished">2020-05-15</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/15/JavaScript%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/">JavaScript类型转换</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>​        由于JavaScript的弱类型特点，导致他的数据类型是由他的值决定的，所以在使用过程中，JavaScript会存在一些让人迷惑的类型转换过程。</p>
-<p>​        说到类型转换，两个常用的函数是toString()和valueOf()。见文知意，对于前者toString()，主要是获得表示该对象的字符串，对于后者valueOf()，主要是获得该对象的原始数据，数据类型转换是指在有+运算的时候，</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> bar=<span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(bar+<span class="number">0</span>);</span><br><span class="line"><span class="comment">//准从表达式中有数字的情况，对将bar转换成数字，1，所以结果是1</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(bar+<span class="string">"xyz"</span>);</span><br><span class="line"><span class="comment">//准从表达式中有字符串的情况，对将bar转换成字符串，结果是truexyz</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(bar+<span class="literal">true</span>);</span><br><span class="line"><span class="comment">//表达式中有布尔类型的情况，两者都转换成数字，结果是2</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(bar+<span class="literal">false</span>);</span><br><span class="line"><span class="comment">//表达式中有布尔类型的情况，两者都转换成数字，结果是1</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'1'</span>&gt;bar);</span><br><span class="line"><span class="comment">// 不知道为啥，但是是false</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">1</span>+<span class="string">'2'</span>+<span class="literal">false</span>);</span><br><span class="line"><span class="comment">// 根本从左到右的计算规则，首先将false转字符传，然后再进行字符串的拼接 12false</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'2'</span> + [<span class="string">'koala'</span>,<span class="number">1</span>]);</span><br><span class="line"><span class="comment">// 将数组转换成toString()  2koala,1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> obj1 = &#123;</span><br><span class="line">   a:<span class="number">1</span>,</span><br><span class="line">   b:<span class="number">2</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'2'</span>+obj1)；</span><br><span class="line"><span class="comment">// 对obj1执行toString()方法，所以是2ObjectObjecy</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> obj2 = &#123;</span><br><span class="line">    toString:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'a'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'2'</span>+obj2)</span><br><span class="line"><span class="comment">// 对obj1执行toString()方法，所以是2a</span></span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<blockquote>
-<p>作者：ikoala<br>链接：<a href="https://juejin.im/post/5d030e03518825361817032f" target="_blank" rel="noopener">https://juejin.im/post/5d030e03518825361817032f</a><br>来源：掘金<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
-</blockquote>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/05/15/JavaScript%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/" data-id="cka7060gu0002nieq29af1nmd" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-JavaScript数据类型" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/05/15/JavaScript%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" class="article-date">
-  <time datetime="2020-05-14T16:43:57.000Z" itemprop="datePublished">2020-05-15</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/15/JavaScript%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">JavaScript数据类型</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>​    </p>
-<p>JS是弱类型的语言，变量的类型是动态的。变量的类型由其值得类型决定。按照大类，可以分为值类型和引用类型。</p>
-<h6 id="值类型："><a href="#值类型：" class="headerlink" title="值类型："></a>值类型：</h6><p>​    NULL类型，undefined类型，Number类型，String类型，Boolean类型，Symbol类型</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> num1 = <span class="number">123</span>;             </span><br><span class="line"><span class="keyword">let</span> num2 = <span class="keyword">new</span> <span class="built_in">Number</span>(<span class="number">123</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> string1 = <span class="string">"hello"</span></span><br><span class="line"><span class="keyword">let</span> string2 =  <span class="keyword">new</span> <span class="built_in">String</span>(<span class="string">"world"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> b1 = <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">let</span> b2 = <span class="keyword">new</span> <span class="built_in">Boolean</span>(<span class="literal">false</span>)</span><br></pre></td></tr></table></figure>
-
-<p>  当我们使用方法1进行数据初始化的时候，后台会自动生成方法2的构造函数，这就解释了，为什么<br>  string.toString()不会报错</p>
-<h6 id="引用类型："><a href="#引用类型：" class="headerlink" title="引用类型："></a>引用类型：</h6><p>​    Function类型，Object类型，Array类型等<br>​    针对Number类型，String类型，Boolean类型还衍生出三个包装类型，即</p>
-<p>​    js有检查数据类型的函数，typeof和instanceof，还可以通过constructar来判断，亦或者是可以通过Object.prototype.toString.call()判断</p>
-<h5 id="一、typeof"><a href="#一、typeof" class="headerlink" title="一、typeof"></a>一、typeof</h5><h6 id="1，针对简单数据类型："><a href="#1，针对简单数据类型：" class="headerlink" title="1，针对简单数据类型："></a>1，针对简单数据类型：</h6><p>typeof用来判断非Null的简单类型是没有问题的，而在处理null的时候会造成困扰，typeOf null 返回object<br>这里的原因主要是因为typeof主要通过判断存储变量的机器码来判断数据类型，在js底层，会有机器码的前三位<br>存储数据的类型信息：<br>000：对象<br>010：浮点数<br>100：字符串<br>110：布尔<br>1：整数</p>
-<p>因为null的存储码是000，所以typeOf null会返回object<br>而，其他的简单类型，用typeof判断是没有问题的</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">number, string, , boolean, <span class="literal">undefined</span>, symbol</span><br><span class="line"><span class="keyword">typeof</span>  <span class="number">1</span>    <span class="comment">// number</span></span><br><span class="line"><span class="keyword">typeof</span> <span class="string">'1'</span>   <span class="comment">// string</span></span><br><span class="line"><span class="keyword">typeof</span> <span class="literal">true</span>   <span class="comment">// boolean</span></span><br><span class="line"><span class="keyword">typeof</span> <span class="literal">undefined</span>   <span class="comment">// undefined</span></span><br><span class="line"><span class="keyword">typeof</span> <span class="keyword">new</span> <span class="built_in">Symbol</span>()   <span class="comment">// symbol</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h6 id="2，针对引用数据类型："><a href="#2，针对引用数据类型：" class="headerlink" title="2，针对引用数据类型："></a>2，针对引用数据类型：</h6><p>typeof判断一些数据类型会造成困扰，举例子说明。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typeof</span> <span class="keyword">new</span> <span class="built_in">Function</span>   <span class="comment">// function</span></span><br><span class="line"><span class="keyword">typeof</span> &#123;&#125;   <span class="comment">// object</span></span><br><span class="line"><span class="keyword">typeof</span> []   <span class="comment">// object</span></span><br></pre></td></tr></table></figure>
-
-<p>并且typeof在处理自定义类型的时候不能正确显示，只会返回object</p>
-<h5 id="二、instanceof"><a href="#二、instanceof" class="headerlink" title="二、instanceof"></a>二、instanceof</h5><p>instanceof的原理主要是看是不是在原型链上，instanceof主要是为了判断是否属于某一类型，这本来无可厚非，但是他还可以判断是否是某类型的子类，这就造成，如果存在继承关系，<br>在使用instanceof进行判断的时候，就会产生困扰，可能会造成非预期的效果。</p>
-<p>比如自己构造的类，在使用new关键字进行实例化的时候，会返回true，而直接使用类进行初始化的时候，instanceof 会返回false</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span> (<span class="params"></span>) </span>&#123;<span class="built_in">console</span>.log(<span class="number">1</span>)&#125;</span><br><span class="line"><span class="keyword">let</span> p1 = <span class="keyword">new</span> Person()          p1  <span class="keyword">instanceof</span> Person   <span class="literal">true</span></span><br><span class="line"><span class="keyword">let</span> p2 = Person()              p2  <span class="keyword">instanceof</span> Person   <span class="literal">false</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h6 id="1，针对简单数据类型：-1"><a href="#1，针对简单数据类型：-1" class="headerlink" title="1，针对简单数据类型："></a>1，针对简单数据类型：</h6><p>因为instanceof的判断原理，所以在处理诸如Number，String，和Boolean的时候会有一些需要注意的点。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> num1 = <span class="number">123</span>;              </span><br><span class="line"><span class="keyword">let</span> num2 = <span class="keyword">new</span> <span class="built_in">Number</span>(<span class="number">123</span>)</span><br><span class="line">num1 <span class="keyword">instanceof</span> <span class="built_in">Number</span>  <span class="comment">//false</span></span><br><span class="line">num2 <span class="keyword">instanceof</span> <span class="built_in">Number</span>  <span class="comment">//true</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> string1 = <span class="string">"hello"</span></span><br><span class="line"><span class="keyword">let</span> string2 =  <span class="keyword">new</span> <span class="built_in">String</span>(<span class="string">"world"</span>)</span><br><span class="line">string1 <span class="keyword">instanceof</span> <span class="built_in">String</span>  <span class="comment">//false</span></span><br><span class="line">string2 <span class="keyword">instanceof</span> <span class="built_in">String</span>  <span class="comment">//true</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> b1 = <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">let</span> b2 = <span class="keyword">new</span> <span class="built_in">Boolean</span>(<span class="literal">false</span>)</span><br><span class="line">b1 <span class="keyword">instanceof</span> <span class="built_in">Boolean</span>  <span class="comment">//false</span></span><br><span class="line">b2 <span class="keyword">instanceof</span> <span class="built_in">Boolean</span>  <span class="comment">//true</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> sy = <span class="built_in">Symbol</span>()</span><br><span class="line">sy <span class="keyword">instanceof</span> <span class="built_in">Symbol</span>  <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
-
-<p>​        通过示例代码可以看出，instanceof因为需要检查原型链上的构造函数，因此，检测简单类型比较鸡肋，除非是通过构造函数进行的包装类型。</p>
-<p>​        根据instanceOf的原理手写下instanceOf</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">instanceOf</span>(<span class="params">left, right</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> leftValue = left.__proto__</span><br><span class="line">  <span class="keyword">let</span> rightValue = right.prototype</span><br><span class="line">  <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (leftValue === <span class="literal">null</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (leftValue === rightValue) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">    leftValue = leftValue.__proto__</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>​        </p>
-<p>因为众所周知的原因，js一切对象都来源于null，是不是 sy instanceof null 也会返回true呢？<br>这里不会，这里会提示 Right-hand side of ‘instanceof’ is not an object</p>
-<h6 id="2，针对引用数据类型：-1"><a href="#2，针对引用数据类型：-1" class="headerlink" title="2，针对引用数据类型："></a>2，针对引用数据类型：</h6><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> fn = <span class="keyword">new</span> <span class="built_in">Function</span>()</span><br><span class="line"><span class="keyword">let</span> arr = <span class="keyword">new</span> <span class="built_in">Array</span>([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</span><br><span class="line"><span class="keyword">let</span> obj = <span class="keyword">new</span> <span class="built_in">Object</span>(&#123;<span class="attr">b</span>:<span class="number">1</span>&#125;)</span><br><span class="line"></span><br><span class="line">fn <span class="keyword">instanceof</span> <span class="built_in">Function</span> <span class="comment">// true</span></span><br><span class="line">arr <span class="keyword">instanceof</span> <span class="built_in">Array</span>   <span class="comment">// true</span></span><br><span class="line">obj <span class="keyword">instanceof</span> <span class="built_in">Object</span>  <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> Person = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;</span><br><span class="line"><span class="keyword">let</span> Student = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;</span><br><span class="line">Student.prototype = <span class="keyword">new</span> Person()</span><br><span class="line"><span class="keyword">let</span> st = <span class="keyword">new</span> Student()</span><br><span class="line"></span><br><span class="line">st <span class="keyword">instanceof</span> Person  <span class="comment">// true</span></span><br><span class="line">st <span class="keyword">instanceof</span> Student <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h5 id="三、constructor方法判断"><a href="#三、constructor方法判断" class="headerlink" title="三、constructor方法判断"></a>三、constructor方法判断</h5><p>constructor代表构造函数，在通过new命令进行对象初始化的时候执行，任何具有原型对象的对象都会自动继承这个方法、<br>对象的constructor属性会返回这个对象的构造函数，因此可以通过这个判断对象的类型</p>
-<h6 id="1，针对简单数据类型：-2"><a href="#1，针对简单数据类型：-2" class="headerlink" title="1，针对简单数据类型："></a>1，针对简单数据类型：</h6><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> num1 = <span class="number">123</span>;             </span><br><span class="line"><span class="keyword">let</span> num2 = <span class="keyword">new</span> <span class="built_in">Number</span>(<span class="number">123</span>)</span><br><span class="line">num1.constructor === <span class="built_in">Number</span>  <span class="comment">// true</span></span><br><span class="line">num2.constructor === <span class="built_in">Number</span>  <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> string1 = <span class="string">"hello"</span> </span><br><span class="line"><span class="keyword">let</span> string2 =  <span class="keyword">new</span> <span class="built_in">String</span>(<span class="string">"world"</span>)</span><br><span class="line">string1.constructor === <span class="built_in">String</span>  <span class="comment">// true</span></span><br><span class="line">string2.constructor === <span class="built_in">String</span>  <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> b1 = <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">let</span> b2 = <span class="keyword">new</span> <span class="built_in">Boolean</span>(<span class="literal">false</span>)</span><br><span class="line">b1.constructor === <span class="built_in">Boolean</span>  <span class="comment">// true</span></span><br><span class="line">b2.constructor === <span class="built_in">Boolean</span>  <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> sy = <span class="built_in">Symbol</span>()</span><br><span class="line">b1.constructor === <span class="built_in">Symbol</span>  <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
-
-
-<p>null，undefined没有constructor属性</p>
-<h6 id="2，针对引用数据类型：-2"><a href="#2，针对引用数据类型：-2" class="headerlink" title="2，针对引用数据类型："></a>2，针对引用数据类型：</h6><h5 id="四、Object-prototype-toString-call"><a href="#四、Object-prototype-toString-call" class="headerlink" title="四、Object.prototype.toString.call"></a>四、Object.prototype.toString.call</h5><p>这个方法是目前来说，最全面最准确的方法，他的原理是首先调用object对象原型链上的toString方法，然后通过call改变函数执行主体的指向，让待检测对象执行这个方法，进而可以打印出待检测对象的属性</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> toString = <span class="built_in">Object</span>.prototype.toString</span><br><span class="line">toString.call(**).slice(<span class="number">8</span>,<span class="number">-1</span>)</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/05/15/JavaScript%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" data-id="cka705s240001nieqb4u6bjz5" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/05/15/hello-world/" class="article-date">
-  <time datetime="2020-05-14T16:20:36.276Z" itemprop="datePublished">2020-05-15</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/15/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/05/15/hello-world/" data-id="cka6zjtr60000dweqaamw2xgr" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
+  </nav>
 
 </section>
         
@@ -499,7 +752,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li></ul>
     </div>
   </div>
 
@@ -516,19 +769,19 @@
           </li>
         
           <li>
-            <a href="/2020/05/15/JavaScript%E4%B8%ADcall%E5%92%8Capply%E7%9A%84%E5%BA%94%E7%94%A8/">JavaScript中call和apply的应用</a>
+            <a href="/2020/05/15/11.JavaScript%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/">JavaScript缓存机制</a>
           </li>
         
           <li>
-            <a href="/2020/05/15/JavaScript%E9%97%AD%E5%8C%85/">JavaScript闭包</a>
+            <a href="/2020/05/15/12.%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98%E5%85%A8%E9%9B%86/">JavaScript中的跨域问题</a>
           </li>
         
           <li>
-            <a href="/2020/05/15/JavaScript%E4%B8%AD%E4%BA%8B%E4%BB%B6%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F/">JavaScript中事件执行顺序</a>
+            <a href="/2020/05/15/10.%E6%B5%8F%E8%A7%88%E5%99%A8%E5%9C%B0%E5%9D%80%E6%A0%8F%E8%BE%93%E5%85%A5%E5%9C%B0%E5%9D%80%E4%B9%8B%E5%90%8E/">浏览器地址输入url之后。。。</a>
           </li>
         
           <li>
-            <a href="/2020/05/15/JavaScript%E7%9A%84%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E5%92%8C%E4%BD%9C%E7%94%A8%E5%9F%9F/">JavaScript的执行上下文和作用域</a>
+            <a href="/2020/05/15/13.HTML5%20Web%20Worker/">HTML5 Web Worker</a>
           </li>
         
       </ul>
