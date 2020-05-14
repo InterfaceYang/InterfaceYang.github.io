@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>JavaScript闭包 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="​        闭包，简单来说就是通过函数内返回函数，由于外部函数的命名空间被内部函数所引用，来达到就算函数执行完毕，也不会清除内存空间的目的。 文章所有内容来自于这篇短文，本文只做本人的碎碎念  知识储备 了解函数执行时，js引擎做了什么 执行到函数，将创建函数作用域，其内部的变量作为作用域内的本地变量，直到函数结束才释放  函数什么时候开始，什么时候结束 函数一般是以函数名后边有左括号（为">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript闭包">
+<meta property="og:url" content="http://yoursite.com/2020/05/15/JavaScript%E9%97%AD%E5%8C%85/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="​        闭包，简单来说就是通过函数内返回函数，由于外部函数的命名空间被内部函数所引用，来达到就算函数执行完毕，也不会清除内存空间的目的。 文章所有内容来自于这篇短文，本文只做本人的碎碎念  知识储备 了解函数执行时，js引擎做了什么 执行到函数，将创建函数作用域，其内部的变量作为作用域内的本地变量，直到函数结束才释放  函数什么时候开始，什么时候结束 函数一般是以函数名后边有左括号（为">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-05-14T22:51:58.000Z">
+<meta property="article:modified_time" content="2020-05-14T22:52:56.146Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <!-- <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css"> -->
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-JavaScript闭包" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/05/15/JavaScript%E9%97%AD%E5%8C%85/" class="article-date">
+  <time datetime="2020-05-14T22:51:58.000Z" itemprop="datePublished">2020-05-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      JavaScript闭包
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>​        闭包，简单来说就是通过函数内返回函数，由于外部函数的命名空间被内部函数所引用，来达到就算函数执行完毕，也不会清除内存空间的目的。</p>
+<p><a href="https://zhuanlan.zhihu.com/p/56490498" target="_blank" rel="noopener">文章所有内容来自于这篇短文，本文只做本人的碎碎念</a></p>
+</blockquote>
+<h5 id="知识储备"><a href="#知识储备" class="headerlink" title="知识储备"></a>知识储备</h5><ol>
+<li><p>了解函数执行时，js引擎做了什么</p>
+<p>执行到函数，将创建函数作用域，其内部的变量作为作用域内的本地变量，直到函数结束才释放</p>
+</li>
+<li><p>函数什么时候开始，什么时候结束</p>
+<p>函数一般是以函数名后边有左括号（为开始执行标识，结束是遇到return函数或者}</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//js引擎执行到这，会用一个叫sayHello的变量盛放这个函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sayHello</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'helo world'</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 执行到这，会在全局中寻找sayHello的变量，找到原来是个函数，</span></span><br><span class="line"><span class="comment">// 并且看到（，执行他</span></span><br><span class="line">sayHello()</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<h5 id="基础例子"><a href="#基础例子" class="headerlink" title="基础例子"></a>基础例子</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//1.全局上下文声明变量 a，赋值为3</span></span><br><span class="line"><span class="number">1</span>: <span class="keyword">let</span> a = <span class="number">3</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//2.全局上下文声明变量 addTwo ，赋值为一个函数</span></span><br><span class="line"><span class="number">2</span>: <span class="function"><span class="keyword">function</span> <span class="title">addTwo</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line"><span class="number">3</span>:   <span class="keyword">let</span> ret = x + <span class="number">2</span></span><br><span class="line"><span class="number">4</span>:   <span class="keyword">return</span> ret</span><br><span class="line"><span class="number">5</span>: &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3.首先，全局上下文声明变量b，变量一经声明，其值就是undefined</span></span><br><span class="line"><span class="comment">// 4.第六行，我们看到=赋值运算符，准备把后边的东西赋值给b，突然意识到后边的东西是个函数，并且看到函数开始的标志双括号，于是乎，不论addTwo函数返回啥，最后都要赋值给b</span></span><br><span class="line"><span class="comment">// 5.函数名叫addTwo，我们在全局上下文找找，突然发现，在第二行的时候赋值了一个，于是就要执行这个函数</span></span><br><span class="line"><span class="comment">// 6.看到这个函数参数里有个a，于是在全局上下文找这个a，在第一行就看到了a=3，于是把这个3带入到函数里，开始执行他,就像之前说的，执行函数需要生成函数执行的上下文，并且推入到执行栈里。于是这里addTwo执行上下文被推到了执行栈</span></span><br><span class="line"><span class="comment">// 7.仔细研究2-5行，就会看到第二行，函数参数里有个x，这个时候已经把3传递过来了，所以把3赋值给x</span></span><br><span class="line"><span class="comment">// 8.在addTwo执行栈里，声明一个ret，声明之后默认是undefined，</span></span><br><span class="line"><span class="comment">// 9.第三行赋值运算符的右边有个x，在addTwo执行栈中找x是何物，找到解析7中。将3赋值给x，于是x+2 = 3+2。执行相加操作，把5赋值给ret</span></span><br><span class="line"><span class="comment">// 10.return ret，这里在addTwo作用域内找本地变量ret，找到第3行已经被赋值为5的ret，返回函数</span></span><br><span class="line"><span class="comment">// 11.函数结束。addTwo执行上下文被推出执行栈，内部变量失效，返回值5返回给调用上下文，并且赋值给b</span></span><br><span class="line"><span class="number">6</span>: <span class="keyword">let</span> b = addTwo(a)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 执行console.log函数，全局作用域内寻找b，然后打印出b</span></span><br><span class="line"><span class="number">7</span>: <span class="built_in">console</span>.log(b)   <span class="comment">// =&gt;5</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="进阶例子"><a href="#进阶例子" class="headerlink" title="进阶例子"></a>进阶例子</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">// //1.全局上下文声明变量 val，赋值为7</span></span><br><span class="line"> <span class="number">1</span>: <span class="keyword">let</span> val = <span class="number">7</span></span><br><span class="line"> </span><br><span class="line"> <span class="comment">//2.全局上下文声明变量 addTwo ，赋值为一个函数</span></span><br><span class="line"> <span class="number">2</span>: <span class="function"><span class="keyword">function</span> <span class="title">createAdder</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"> <span class="number">3</span>:   <span class="function"><span class="keyword">function</span> <span class="title">addNumbers</span>(<span class="params">a, b</span>) </span>&#123;</span><br><span class="line"> <span class="number">4</span>:     <span class="keyword">let</span> ret = a + b</span><br><span class="line"> <span class="number">5</span>:     <span class="keyword">return</span> ret</span><br><span class="line"> <span class="number">6</span>:   &#125;</span><br><span class="line"> <span class="number">7</span>:   <span class="keyword">return</span> addNumbers</span><br><span class="line"> <span class="number">8</span>: &#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line">  <span class="comment">// 3,首先全局上下文声明变量adder，为undefined</span></span><br><span class="line">  <span class="comment">// 4，准备给adder赋值，发现右边是个函数，于是在全局上下文中寻找createAdder，发现果真有，并且之后还有双         括号，这可是函数的执行标识，所以会将函数的返回值赋值给adder</span></span><br><span class="line">  <span class="comment">// 5，找到createAdder，并且执行他，产生createAdder函数上下文</span></span><br><span class="line">  <span class="comment">// 6，在createAdder函数上下文中，第三行，看到函数生命addNumbers，因此把函数赋值给addNumbers</span></span><br><span class="line">  <span class="comment">// 7，第七行，发现return方法，这是函数执行结束的标识，createAdder函数上下文被清理，</span></span><br><span class="line">  <span class="comment">//    但是addNumbers因为已经被赋值给adder，没被清理</span></span><br><span class="line"> <span class="number">9</span>: <span class="keyword">let</span> adder = createAdder()</span><br><span class="line"> </span><br><span class="line"> <span class="comment">// 同样的，先声明sum为undefined，之后赋值，发现是函数，这执行他。</span></span><br><span class="line"> <span class="comment">// adder 已经被赋值为addNumbers，然后是7+8</span></span><br><span class="line"><span class="number">10</span>: <span class="keyword">let</span> sum = adder(val, <span class="number">8</span>)</span><br><span class="line"></span><br><span class="line"><span class="number">11</span>: <span class="built_in">console</span>.log(<span class="string">'example of function returning a function: '</span>, sum)</span><br></pre></td></tr></table></figure>
+
+<h5 id="闭包正菜"><a href="#闭包正菜" class="headerlink" title="闭包正菜"></a>闭包正菜</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">// 1，函数开始执行，遇到函数，老规矩，全局上下文搞个变量  createCounter存函2-8行的函数</span></span><br><span class="line"> <span class="number">1</span>: <span class="function"><span class="keyword">function</span> <span class="title">createCounter</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">   </span><br><span class="line"> <span class="comment">// 3，函数内部执行，首先声明counter赋值0，</span></span><br><span class="line"> <span class="number">2</span>:   <span class="keyword">let</span> counter = <span class="number">0</span></span><br><span class="line"> </span><br><span class="line"> <span class="comment">// 4，声明myFuntion，赋值后边函数的返回值</span></span><br><span class="line"> <span class="number">3</span>:   <span class="keyword">const</span> myFunction = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">   </span><br><span class="line"> <span class="comment">// 5，赋值操作，让counter+1，0+1 = 1</span></span><br><span class="line"> <span class="number">4</span>:     counter = counter + <span class="number">1</span></span><br><span class="line">   </span><br><span class="line"> <span class="comment">// 6，遇到return，则函数执行完毕，推出执行栈，内部变量销毁,但是myFunction由于被下边返回因此</span></span><br><span class="line"> <span class="number">5</span>:     <span class="keyword">return</span> counter</span><br><span class="line"> <span class="number">6</span>:   &#125;</span><br><span class="line"> <span class="comment">// 7，遇到return </span></span><br><span class="line"> <span class="number">7</span>:   <span class="keyword">return</span> myFunction</span><br><span class="line"> <span class="number">8</span>: &#125;</span><br><span class="line">   <span class="comment">// 2，遇到声明变量，遇到函数声明，遇到函数后有（），老规矩，increment在全局作用域下被赋值为createCounter函数的返回值</span></span><br><span class="line"> <span class="number">9</span>: <span class="keyword">const</span> increment = createCounter()</span><br><span class="line"><span class="number">10</span>: <span class="keyword">const</span> c1 = increment()</span><br><span class="line"><span class="number">11</span>: <span class="keyword">const</span> c2 = increment()</span><br><span class="line"><span class="number">12</span>: <span class="keyword">const</span> c3 = increment()</span><br><span class="line"><span class="number">13</span>: <span class="built_in">console</span>.log(<span class="string">'example increment'</span>, c1, c2, c3)</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/05/15/JavaScript%E9%97%AD%E5%8C%85/" data-id="cka7ddc3a0002u6eq0lj7gmc7" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/05/15/JavaScript%E4%B8%ADcall%E5%92%8Capply%E7%9A%84%E5%BA%94%E7%94%A8/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          JavaScript中call和apply的应用
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/05/15/JavaScript%E4%B8%AD%E4%BA%8B%E4%BB%B6%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">JavaScript中事件执行顺序</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/05/15/JavaScript%E4%B8%ADthis%E7%9A%84%E6%8C%87%E5%90%91%E9%97%AE%E9%A2%98/">7.JavaScript中this的指向问题</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/15/JavaScript%E4%B8%ADcall%E5%92%8Capply%E7%9A%84%E5%BA%94%E7%94%A8/">JavaScript中call和apply的应用</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/15/JavaScript%E9%97%AD%E5%8C%85/">JavaScript闭包</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/15/JavaScript%E4%B8%AD%E4%BA%8B%E4%BB%B6%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F/">JavaScript中事件执行顺序</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/15/JavaScript%E7%9A%84%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E5%92%8C%E4%BD%9C%E7%94%A8%E5%9F%9F/">JavaScript的执行上下文和作用域</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script> -->
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
